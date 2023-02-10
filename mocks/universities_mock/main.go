@@ -25,11 +25,6 @@ func searchHandler(w http.ResponseWriter, r *http.Request) {
 
 		w.Header().Add("content-type", "application/json")
 
-		if len(r.URL.RawQuery) == 0 {
-			http.Error(w, "No parameters in search ", http.StatusBadRequest)
-			return
-		}
-
 		output, err := parseFile("./res/university.json")
 		if err != nil {
 			http.Error(w, "Error when reading resource file (Error: "+
@@ -54,9 +49,10 @@ func main() {
 	// Handle port assignment
 	// (either based on environment variable, or local override)
 	port := os.Getenv("PORT")
+	const DefaultPort = "8080"
 	if port == "" {
-		log.Println("$PORT has not been set. Default: 8080")
-		port = "8081"
+		log.Println("$PORT has not been set. Default: " + DefaultPort)
+		port = DefaultPort
 	}
 
 	// Set up handler endpoints
