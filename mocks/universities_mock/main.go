@@ -20,9 +20,15 @@ func parseFile(filename string) ([]byte, error) {
 func searchHandler(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case http.MethodGet:
-		log.Println("Received " + r.Method + " request on university mock, returning mock data.")
+		log.Println("Received " + r.Method +
+			" request on university mock, returning mock data.")
 
 		w.Header().Add("content-type", "application/json")
+
+		if len(r.URL.RawQuery) == 0 {
+			http.Error(w, "No parameters in search ", http.StatusBadRequest)
+			return
+		}
 
 		output, err := parseFile("./res/university.json")
 		if err != nil {
@@ -33,11 +39,11 @@ func searchHandler(w http.ResponseWriter, r *http.Request) {
 
 		_, err2 := fmt.Fprint(w, string(output))
 		if err2 != nil {
-			http.Error(w, "Error when writing HTTP response (Error: "+err2.Error()+")", http.StatusInternalServerError)
+			http.Error(w, "Error when writing HTTP response (Error: "+
+				err2.Error()+")", http.StatusInternalServerError)
 			return
 
 		}
-		break
 	default:
 		http.Error(w, "Handler not implemented", http.StatusNotImplemented)
 	}
@@ -45,11 +51,12 @@ func searchHandler(w http.ResponseWriter, r *http.Request) {
 
 func main() {
 
-	// Handle port assignment (either based on environment variable, or local override)
+	// Handle port assignment
+	// (either based on environment variable, or local override)
 	port := os.Getenv("PORT")
 	if port == "" {
 		log.Println("$PORT has not been set. Default: 8080")
-		port = "8080"
+		port = "8081"
 	}
 
 	// Set up handler endpoints
