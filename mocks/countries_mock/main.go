@@ -104,6 +104,8 @@ func searchByCode(w http.ResponseWriter, r *http.Request) {
 
 }
 
+//TODO: ADD search by subregion if necessary
+
 func main() {
 	port := os.Getenv("PORT")
 	const DefaultPort = "8081"
