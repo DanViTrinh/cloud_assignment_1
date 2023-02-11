@@ -30,7 +30,15 @@ func searchName(w http.ResponseWriter, r *http.Request) {
 		}
 
 		w.Header().Add("content-type", "application/json")
-		output, err := ParseFile("./res/norway.json")
+		var outputFile string
+
+		if len(r.URL.RawQuery) != 0 && r.URL.Query()["fullText"][0] == "true" {
+			outputFile = "./res/norway.json"
+		} else {
+			outputFile = "./res/united_countries.json"
+		}
+
+		output, err := ParseFile(outputFile)
 
 		if err != nil {
 			http.Error(w, "Error when reading resource file (Error: "+
