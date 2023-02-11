@@ -1,0 +1,24 @@
+package handlers
+
+type University struct {
+	Name      string            `json:name`
+	Country   string            `json:country`
+	IsoCode   string            `json:alpha_two_code`
+	WebPages  []string          `json:webpages,omitempty`
+	Languages map[string]string `json:languages,omitempty`
+	Maps      []string          `json:maps,omitempty`
+}
+
+/*
+TODO: figure out:
+not sure if subregion or bordering countries should be used for
+neighbouring countries.
+Japan for instance has no bordering countries
+*/
+type SubRegion struct {
+	SubRegion string `json:subregion`
+}
+
+type BorderingCountries struct {
+	BorderingCodes []string `json:borders,omitempty`
+}
