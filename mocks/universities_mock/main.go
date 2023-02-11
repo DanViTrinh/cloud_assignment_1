@@ -49,7 +49,7 @@ func main() {
 	// Handle port assignment
 	// (either based on environment variable, or local override)
 	port := os.Getenv("PORT")
-	const DefaultPort = "8080"
+	const DefaultPort = "8082"
 	if port == "" {
 		log.Println("$PORT has not been set. Default: " + DefaultPort)
 		port = DefaultPort
