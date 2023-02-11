@@ -1,0 +1,7 @@
+go 1.18
+
+use (
+	./mocks/countries_mock
+	./mocks/universities_mock
+	./university_service
+)
