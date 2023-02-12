@@ -18,7 +18,6 @@ func getResponseFromApi(w http.ResponseWriter,
 	}
 
 	// request.Header.Add("content-type", "application/json")
-
 	client := &http.Client{}
 	defer client.CloseIdleConnections()
 
@@ -73,6 +72,7 @@ func marshalAndDisplayData(w http.ResponseWriter, data interface{}) bool {
 	return true
 }
 
+// TODO: add parameters to the new request and handle params from user
 func handleGetUniInfo(w http.ResponseWriter, r *http.Request) {
 	uniUrl := "http://" + UniversitiesAPIurl + UniversitiesSearch
 	uniName := "university"
