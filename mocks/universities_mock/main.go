@@ -20,12 +20,26 @@ func parseFile(filename string) ([]byte, error) {
 func searchHandler(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case http.MethodGet:
+		params := r.URL.Query()
+		if len(params) == 0 || params["name"] == nil {
+
+			http.Error(w, "No param or invalid param given this will return "+
+				"all universities in the real API", http.StatusBadRequest)
+			return
+		}
+		universityFilePath := "./res/university.json"
+
+		if params["country"] != nil {
+			universityFilePath = "./res/university_with_country.json"
+		}
+
 		log.Println("Received " + r.Method +
 			" request on university mock, returning mock data.")
 
 		w.Header().Add("content-type", "application/json")
 
-		output, err := parseFile("./res/university.json")
+		output, err := parseFile(universityFilePath)
+
 		if err != nil {
 			http.Error(w, "Error when reading resource file (Error: "+
 				err.Error()+")", http.StatusInternalServerError)

@@ -1,0 +1,62 @@
+[
+    {
+        "domains": [
+            "mdh.se"
+        ],
+        "country": "Sweden",
+        "alpha_two_code": "SE",
+        "web_pages": [
+            "http://www.mdh.se/"
+        ],
+        "state-province": null,
+        "name": "Mälardalen University"
+    },
+    {
+        "domains": [
+            "wmu.se"
+        ],
+        "country": "Sweden",
+        "alpha_two_code": "SE",
+        "web_pages": [
+            "http://www.wmu.se/"
+        ],
+        "state-province": null,
+        "name": "World Maritime University"
+    },
+    {
+        "domains": [
+            "wmu.se"
+        ],
+        "country": "Sweden",
+        "alpha_two_code": "SE",
+        "web_pages": [
+            "http://www.wmu.se/"
+        ],
+        "state-province": null,
+        "name": "World Maritime University"
+    },
+    {
+        "domains": [
+            "mah.se"
+        ],
+        "country": "Sweden",
+        "alpha_two_code": "SE",
+        "web_pages": [
+            "http://www.mah.se/"
+        ],
+        "state-province": null,
+        "name": "Malmö University College"
+    },
+    {
+        "domains": [
+            "miun.se"
+        ],
+        "country": "Sweden",
+        "alpha_two_code": "SE",
+        "web_pages": [
+            "http://www.miun.se/"
+        ],
+        "state-province": null,
+        "name": "Mid-Sweden University"
+    }
+]
