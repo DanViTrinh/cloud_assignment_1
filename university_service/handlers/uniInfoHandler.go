@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"strings"
 )
 
 func populateDataWithResponse(w http.ResponseWriter, res *http.Response,
@@ -80,16 +81,31 @@ func getResponseFromApi(w http.ResponseWriter,
 	return res
 }
 
+func getParamFromRequestURL(r *http.Request, desiredLen int) string {
+	parts := strings.Split(r.URL.Path, "/")
+
+	if len(parts) == desiredLen && parts[desiredLen-1] != "" {
+		return parts[desiredLen-1]
+	}
+	return ""
+}
+
+// TODO: optional fix: Sometimes getting duplicate universities from real api
 func handleGetUniInfo(w http.ResponseWriter, r *http.Request) {
-	uniUrl := "http://" + UniversitiesAPIurl + UniversitiesSearch
+	uniUrl := UniversitiesAPIurl + UniversitiesSearch
 	uniName := "university"
 
-	//TODO: get params from user url
-	dummyParams := make(map[string]string)
-	dummyParams["name"] = "random"
-	dummyParams["country"] = "some country"
+	name := getParamFromRequestURL(r, 5)
+	if name == "" {
+		http.Error(w, "Expecting format .../{university_name}",
+			http.StatusBadRequest)
+		return
+	}
 
-	res := getResponseFromApi(w, uniUrl, uniName, dummyParams)
+	params := make(map[string]string)
+	params["name"] = name
+
+	res := getResponseFromApi(w, uniUrl, uniName, params)
 	if res == nil {
 		return
 	}
@@ -100,10 +116,8 @@ func handleGetUniInfo(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	for _, uniFound := range unisFound {
-		if !marshalAndDisplayData(w, uniFound) {
-			return
-		}
+	if !marshalAndDisplayData(w, unisFound) {
+		return
 	}
 }
 func UniInfoHandler(w http.ResponseWriter, r *http.Request) {
