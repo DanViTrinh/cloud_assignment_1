@@ -7,7 +7,7 @@ import (
 
 // TODO: optional fix: Sometimes getting duplicate universities from real api
 func handleGetUniInfo(w http.ResponseWriter, r *http.Request) {
-	uniUrl := UniversitiesAPIurl + UniversitiesSearch
+	uniUrl := utilities.UniversitiesAPIurl + utilities.UniversitiesSearch
 	uniName := "university"
 
 	name := utilities.GetParamFromRequestURL(r, 5)
@@ -25,7 +25,7 @@ func handleGetUniInfo(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var unisFound []University
+	var unisFound []utilities.University
 
 	if !utilities.PopulateDataWithResponse(w, res, uniName, &unisFound) {
 		return

@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"os"
 	"university_service/handlers"
+	"university_service/handlers/utilities"
 )
 
 func main() {
@@ -17,11 +18,11 @@ func main() {
 	}
 
 	// Handler endpoints
-	http.HandleFunc(handlers.DefaultPath, handlers.EmptyHandler)
+	http.HandleFunc(utilities.DefaultPath, handlers.EmptyHandler)
 
-	http.HandleFunc(handlers.UniInfoPath, handlers.UniInfoHandler)
+	http.HandleFunc(utilities.UniInfoPath, handlers.UniInfoHandler)
 	//TODO: TEST if it works without the /
-	http.HandleFunc(handlers.UniInfoPath+"/", handlers.UniInfoHandler)
+	http.HandleFunc(utilities.UniInfoPath+"/", handlers.UniInfoHandler)
 
 	log.Println("Listening on port " + port)
 	log.Fatal(http.ListenAndServe(":"+port, nil))

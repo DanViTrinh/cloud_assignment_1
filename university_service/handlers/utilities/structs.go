@@ -1,12 +1,12 @@
-package handlers
+package utilities
 
 type University struct {
-	Country string `json:"country"`
-	IsoCode string `json:"alpha_two_code"`
-	Name    string `json:"name"`
-	// WebPages  []string          `json:webpages,omitempty`
-	// Languages map[string]string `json:languages,omitempty`
-	// Maps      []string          `json:maps,omitempty`
+	Country   string            `json:"country"`
+	IsoCode   string            `json:"alpha_two_code"`
+	Name      string            `json:"name"`
+	WebPages  []string          `json:"webpages,omitempty"`
+	Languages map[string]string `json:"languages,omitempty"`
+	Maps      []string          `json:"maps,omitempty"`
 }
 
 /*

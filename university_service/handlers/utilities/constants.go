@@ -1,4 +1,4 @@
-package handlers
+package utilities
 
 // URL paths
 const DefaultPath = "/"
