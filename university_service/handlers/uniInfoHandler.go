@@ -53,7 +53,7 @@ func populateDataWithResponse(w http.ResponseWriter, res *http.Response,
 	return true
 }
 
-func UniInfoHandler(w http.ResponseWriter, r *http.Request) {
+func handleGetUniInfo(w http.ResponseWriter, r *http.Request) {
 	uniUrl := "http://" + UniversitiesAPIurl + UniversitiesSearch
 	uniName := "university"
 
@@ -67,21 +67,6 @@ func UniInfoHandler(w http.ResponseWriter, r *http.Request) {
 	if !populateDataWithResponse(w, res, uniName, &unisFound) {
 		return
 	}
-	// body, err := ioutil.ReadAll(res.Body)
-
-	// if err != nil {
-	// 	http.Error(w, "Error during reading response",
-	// 		http.StatusInternalServerError)
-	// 	return
-	// }
-
-	// err = json.Unmarshal(body, &unisFound)
-
-	// if err != nil {
-	// 	http.Error(w, "Error during unmarshaling from "+uniName+" API",
-	// 		http.StatusInternalServerError)
-	// 	return
-	// }
 
 	w.Header().Add("content-type", "application/json")
 
@@ -90,5 +75,13 @@ func UniInfoHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Error during returning output",
 			http.StatusInternalServerError)
 		return
+	}
+}
+func UniInfoHandler(w http.ResponseWriter, r *http.Request) {
+	switch r.Method {
+	case http.MethodGet:
+		handleGetUniInfo(w, r)
+	default:
+		http.Error(w, "Method not yet supported ", http.StatusNotImplemented)
 	}
 }
