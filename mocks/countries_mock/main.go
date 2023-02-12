@@ -79,7 +79,7 @@ func searchName(w http.ResponseWriter, r *http.Request) {
 		var outputFile string
 
 		fullTextParam := r.URL.Query()["fullText"]
-		if len(r.URL.RawQuery) != 0 && fullTextParam != nil &&
+		if len(r.URL.Query()) != 0 && fullTextParam != nil &&
 			fullTextParam[0] == "true" {
 			outputFile = SingleCountryFilePath
 		} else {
