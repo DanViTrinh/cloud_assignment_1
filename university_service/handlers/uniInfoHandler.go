@@ -53,6 +53,26 @@ func populateDataWithResponse(w http.ResponseWriter, res *http.Response,
 	return true
 }
 
+func marshalAndDisplayData(w http.ResponseWriter, data interface{}) bool {
+	w.Header().Add("content-type", "application/json")
+
+	jsonEncodedData, err := json.Marshal(data)
+
+	if err != nil {
+		http.Error(w, "Error during marshalling data",
+			http.StatusInternalServerError)
+		return false
+	}
+
+	_, err = fmt.Fprint(w, string(jsonEncodedData))
+	if err != nil {
+		http.Error(w, "Error during writing response",
+			http.StatusInternalServerError)
+		return false
+	}
+	return true
+}
+
 func handleGetUniInfo(w http.ResponseWriter, r *http.Request) {
 	uniUrl := "http://" + UniversitiesAPIurl + UniversitiesSearch
 	uniName := "university"
@@ -68,12 +88,7 @@ func handleGetUniInfo(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	w.Header().Add("content-type", "application/json")
-
-	_, err := fmt.Fprintln(w, unisFound[0])
-	if err != nil {
-		http.Error(w, "Error during returning output",
-			http.StatusInternalServerError)
+	if !marshalAndDisplayData(w, unisFound[0]) {
 		return
 	}
 }
