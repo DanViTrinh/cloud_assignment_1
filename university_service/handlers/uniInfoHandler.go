@@ -84,7 +84,9 @@ func getResponseFromApi(w http.ResponseWriter,
 func getParamFromRequestURL(r *http.Request, desiredLen int) string {
 	parts := strings.Split(r.URL.Path, "/")
 
-	if len(parts) == desiredLen && parts[desiredLen-1] != "" {
+	if (len(parts) == desiredLen && parts[desiredLen-1] != "") ||
+		(len(parts) == desiredLen+1 && parts[desiredLen-1] != "" &&
+			parts[desiredLen] == "") {
 		return parts[desiredLen-1]
 	}
 	return ""
