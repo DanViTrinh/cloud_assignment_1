@@ -100,7 +100,6 @@ func handleGetUniInfo(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	println(len(unisFound))
 	for _, uniFound := range unisFound {
 		if !marshalAndDisplayData(w, uniFound) {
 			return
