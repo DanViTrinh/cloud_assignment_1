@@ -30,6 +30,7 @@ func UniInfoHandler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		http.Error(w, "Error in getting response from universities API",
 			http.StatusInternalServerError)
+		return
 	}
 
 	body, err := ioutil.ReadAll(res.Body)
@@ -51,7 +52,7 @@ func UniInfoHandler(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Add("content-type", "application/json")
 
-	_, err = fmt.Fprint(w, unisFound)
+	_, err = fmt.Fprintln(w, unisFound[0])
 	if err != nil {
 		http.Error(w, "Error during returning output",
 			http.StatusInternalServerError)
