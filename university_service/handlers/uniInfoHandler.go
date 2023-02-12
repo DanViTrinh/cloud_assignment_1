@@ -82,7 +82,6 @@ func getResponseFromApi(w http.ResponseWriter,
 	return res
 }
 
-// TODO: add parameters to the new request and handle params from user
 func handleGetUniInfo(w http.ResponseWriter, r *http.Request) {
 	uniUrl := "http://" + UniversitiesAPIurl + UniversitiesSearch
 	uniName := "university"
