@@ -57,6 +57,7 @@ func main() {
 
 	// Set up handler endpoints
 	http.HandleFunc("/search", searchHandler)
+	http.HandleFunc("/search/", searchHandler)
 
 	// Start server
 	log.Println("Starting server on port " + port + " ...")
