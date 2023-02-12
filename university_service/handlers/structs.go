@@ -1,12 +1,12 @@
 package handlers
 
 type University struct {
-	Name      string            `json:name`
-	Country   string            `json:country`
-	IsoCode   string            `json:alpha_two_code`
-	WebPages  []string          `json:webpages,omitempty`
-	Languages map[string]string `json:languages,omitempty`
-	Maps      []string          `json:maps,omitempty`
+	Country string `json:"country"`
+	IsoCode string `json:"alpha_two_code"`
+	Name    string `json:"name"`
+	// WebPages  []string          `json:webpages,omitempty`
+	// Languages map[string]string `json:languages,omitempty`
+	// Maps      []string          `json:maps,omitempty`
 }
 
 /*
@@ -16,9 +16,9 @@ neighbouring countries.
 Japan for instance has no bordering countries
 */
 type SubRegion struct {
-	SubRegion string `json:subregion`
+	SubRegion string `json:"subregion"`
 }
 
 type BorderingCountries struct {
-	BorderingCodes []string `json:borders,omitempty`
+	BorderingCodes []string `json:"borders,omitempty"`
 }
