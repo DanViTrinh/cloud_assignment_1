@@ -12,6 +12,7 @@ import (
 const SingleCountryFilePath string = "./res/norway.json"
 const SeveralCountryFilePath string = "./res/united_countries.json"
 const HandlerNotImplementedMessage string = "Handler not implemented"
+const RootPath string = "/v3.1/"
 
 func parseFile(filename string) ([]byte, error) {
 	file, e := ioutil.ReadFile(filename)
@@ -40,18 +41,41 @@ func writeHttpResponseErrorHandler(err error, w http.ResponseWriter) bool {
 	return true
 }
 
+func displayFileHandler(w http.ResponseWriter, filepath string) {
+	w.Header().Add("content-type", "application/json")
+	output, err := parseFile(filepath)
+
+	if !readErrorHandler(err, w) {
+		return
+	}
+	_, err2 := fmt.Fprint(w, string(output))
+	if !writeHttpResponseErrorHandler(err2, w) {
+		return
+	}
+}
+
+func checkParam(w http.ResponseWriter, urlPath string,
+	desiredLen int, expecting string) bool {
+
+	parts := strings.Split(urlPath, "/")
+	if len(parts) != desiredLen || parts[desiredLen-1] == "" {
+		status := http.StatusBadRequest
+		http.Error(w, "Expecting .../"+expecting+
+			", cannot be empty", status)
+		return false
+	}
+	return true
+}
+
 func searchName(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case http.MethodGet:
 		log.Println("Received " + r.Method)
-		parts := strings.Split(r.URL.Path, "/")
-		if len(parts) != 4 || parts[3] == "" {
-			status := http.StatusBadRequest
-			http.Error(w, "Expecting .../name, cannot be empty", status)
+
+		if !checkParam(w, r.URL.Path, 4, "name") {
 			return
 		}
 
-		w.Header().Add("content-type", "application/json")
 		var outputFile string
 
 		fullTextParam := r.URL.Query()["fullText"]
@@ -61,17 +85,8 @@ func searchName(w http.ResponseWriter, r *http.Request) {
 		} else {
 			outputFile = SeveralCountryFilePath
 		}
+		displayFileHandler(w, outputFile)
 
-		output, err := parseFile(outputFile)
-
-		if !readErrorHandler(err, w) {
-			return
-		}
-
-		_, err2 := fmt.Fprint(w, string(output))
-		if !writeHttpResponseErrorHandler(err2, w) {
-			return
-		}
 	default:
 		http.Error(w, HandlerNotImplementedMessage, http.StatusNotImplemented)
 	}
@@ -81,30 +96,28 @@ func searchByCode(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case http.MethodGet:
 		log.Println("Received " + r.Method)
-		parts := strings.Split(r.URL.Path, "/")
-		if len(parts) != 4 || parts[3] == "" {
-			status := http.StatusBadRequest
-			http.Error(w, "Expecting .../code, cannot be empty", status)
+		if !checkParam(w, r.URL.Path, 4, "code") {
 			return
 		}
-		w.Header().Add("content-type", "application/json")
 
-		output, err := parseFile(SingleCountryFilePath)
-		if !readErrorHandler(err, w) {
-			return
-		}
-		_, err2 := fmt.Fprint(w, string(output))
-
-		if !writeHttpResponseErrorHandler(err2, w) {
-			return
-		}
+		displayFileHandler(w, SingleCountryFilePath)
 	default:
 		http.Error(w, HandlerNotImplementedMessage, http.StatusNotImplemented)
 	}
 
 }
 
-//TODO: ADD search by subregion if necessary
+func searchBySubregion(w http.ResponseWriter, r *http.Request) {
+	switch r.Method {
+	case http.MethodGet:
+		log.Println("Received " + r.Method + " on subregion")
+		if !checkParam(w, r.URL.Path, 4, "subregion") {
+			return
+		}
+
+		displayFileHandler(w, SeveralCountryFilePath)
+	}
+}
 
 func main() {
 	port := os.Getenv("PORT")
@@ -114,11 +127,14 @@ func main() {
 		port = DefaultPort
 	}
 
-	http.HandleFunc("/v3.1/name", searchName)
-	http.HandleFunc("/v3.1/name/", searchName)
+	http.HandleFunc(RootPath+"name", searchName)
+	http.HandleFunc(RootPath+"name/", searchName)
 
-	http.HandleFunc("/v3.1/alpha", searchByCode)
-	http.HandleFunc("/v3.1/alpha/", searchByCode)
+	http.HandleFunc(RootPath+"alpha", searchByCode)
+	http.HandleFunc(RootPath+"alpha/", searchByCode)
+
+	http.HandleFunc(RootPath+"subregion", searchBySubregion)
+	http.HandleFunc(RootPath+"subregion/", searchBySubregion)
 
 	err := http.ListenAndServe(":"+port, nil)
 	if err != nil {
