@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"net/url"
 )
 
 // TODO: consider using get instead
@@ -81,15 +82,18 @@ func getResponseFromApi(w http.ResponseWriter,
 	return res
 }
 
-func handleGetUniInfo(w http.ResponseWriter, r *http.Request,
-	params map[string]string) {
-
+func handleGetUniInfo(w http.ResponseWriter, r *http.Request) {
 	uniUrl := "http://" + UniversitiesAPIurl + UniversitiesSearch
 	uniName := "university"
 
 	var unisFound []University
 
-	res := getResponseFromApi(w, uniUrl, uniName, params)
+	//TODO: get params from user url
+	dummyParams := make(map[string]string)
+	dummyParams["name"] = "random"
+	dummyParams["country"] = "some country"
+
+	res := getResponseFromApi(w, uniUrl, uniName, dummyParams)
 	if res == nil {
 		return
 	}
@@ -105,11 +109,9 @@ func handleGetUniInfo(w http.ResponseWriter, r *http.Request,
 func UniInfoHandler(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case http.MethodGet:
-		//TODO: get params from user url
-		dummyParams := make(map[string]string)
-		dummyParams["name"] = "random"
-		dummyParams["country"] = "some country"
-		handleGetUniInfo(w, r, dummyParams)
+		dummyParams := url.Values{}
+		dummyParams.Add("name", "ntnu")
+		handleGetUniInfo(w, r)
 	default:
 		http.Error(w, "Method not yet supported ", http.StatusNotImplemented)
 	}
