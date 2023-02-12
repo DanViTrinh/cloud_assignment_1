@@ -5,10 +5,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
-	"net/url"
 )
-
-// TODO: consider using get instead
 
 func populateDataWithResponse(w http.ResponseWriter, res *http.Response,
 	uniName string, data interface{}) bool {
@@ -51,6 +48,7 @@ func marshalAndDisplayData(w http.ResponseWriter, data interface{}) bool {
 	return true
 }
 
+// TODO: consider using get instead
 func getResponseFromApi(w http.ResponseWriter,
 	apiURL, apiName string, params map[string]string) *http.Response {
 	request, err := http.NewRequest(http.MethodGet, apiURL, nil)
@@ -86,8 +84,6 @@ func handleGetUniInfo(w http.ResponseWriter, r *http.Request) {
 	uniUrl := "http://" + UniversitiesAPIurl + UniversitiesSearch
 	uniName := "university"
 
-	var unisFound []University
-
 	//TODO: get params from user url
 	dummyParams := make(map[string]string)
 	dummyParams["name"] = "random"
@@ -98,19 +94,22 @@ func handleGetUniInfo(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	var unisFound []University
+
 	if !populateDataWithResponse(w, res, uniName, &unisFound) {
 		return
 	}
 
-	if !marshalAndDisplayData(w, unisFound[0]) {
-		return
+	println(len(unisFound))
+	for _, uniFound := range unisFound {
+		if !marshalAndDisplayData(w, uniFound) {
+			return
+		}
 	}
 }
 func UniInfoHandler(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case http.MethodGet:
-		dummyParams := url.Values{}
-		dummyParams.Add("name", "ntnu")
 		handleGetUniInfo(w, r)
 	default:
 		http.Error(w, "Method not yet supported ", http.StatusNotImplemented)
