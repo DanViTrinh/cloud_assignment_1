@@ -1,3 +1,3 @@
 module countries_mock 
 
-go 1.18
+go 1.20

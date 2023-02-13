@@ -1,3 +1,3 @@
 module university_service
 
-go 1.18
+go 1.20
