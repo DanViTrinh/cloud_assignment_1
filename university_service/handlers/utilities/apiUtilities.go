@@ -8,8 +8,8 @@ import (
 	"strings"
 )
 
-func PopulateDataWithResponse(w http.ResponseWriter, res *http.Response,
-	uniName string, data interface{}) bool {
+func populateDataWithResponse(w http.ResponseWriter, res *http.Response,
+	apiName string, data interface{}) bool {
 
 	body, err := ioutil.ReadAll(res.Body)
 
@@ -22,11 +22,53 @@ func PopulateDataWithResponse(w http.ResponseWriter, res *http.Response,
 	err = json.Unmarshal(body, &data)
 
 	if err != nil {
-		http.Error(w, "Error during unmarshaling from "+uniName+" API",
+		http.Error(w, "Error during unmarshaling from "+apiName+" API",
 			http.StatusInternalServerError)
 		return false
 	}
 	return true
+}
+
+// TODO: consider using get instead
+func getResponseFromApi(w http.ResponseWriter,
+	apiURL, apiName string, params *map[string]string) *http.Response {
+	request, err := http.NewRequest(http.MethodGet, apiURL, nil)
+	if err != nil {
+		http.Error(w, "Error in creating new request to "+apiName+" API",
+			http.StatusInternalServerError)
+		return nil
+	}
+
+	q := request.URL.Query()
+
+	for key, val := range *params {
+		q.Add(key, val)
+	}
+
+	request.URL.RawQuery = q.Encode()
+
+	// request.Header.Add("content-type", "application/json")
+	client := &http.Client{}
+	defer client.CloseIdleConnections()
+
+	res, err := client.Do(request)
+
+	if err != nil {
+		http.Error(w, "Error in getting response from "+apiName+" API",
+			http.StatusInternalServerError)
+		return nil
+	}
+	return res
+}
+
+func GetResponseAndPopulateData(w http.ResponseWriter, apiURL, apiName string,
+	params *map[string]string, data interface{}) bool {
+	res := getResponseFromApi(w, apiURL, apiName, params)
+	if res == nil {
+		return false
+	}
+
+	return populateDataWithResponse(w, res, apiName, &data)
 }
 
 func MarshalAndDisplayData(w http.ResponseWriter, data interface{}) bool {
@@ -47,38 +89,6 @@ func MarshalAndDisplayData(w http.ResponseWriter, data interface{}) bool {
 		return false
 	}
 	return true
-}
-
-// TODO: consider using get instead
-func GetResponseFromApi(w http.ResponseWriter,
-	apiURL, apiName string, params map[string]string) *http.Response {
-	request, err := http.NewRequest(http.MethodGet, apiURL, nil)
-	if err != nil {
-		http.Error(w, "Error in creating new request to "+apiName+" API",
-			http.StatusInternalServerError)
-		return nil
-	}
-
-	q := request.URL.Query()
-
-	for key, val := range params {
-		q.Add(key, val)
-	}
-
-	request.URL.RawQuery = q.Encode()
-
-	// request.Header.Add("content-type", "application/json")
-	client := &http.Client{}
-	defer client.CloseIdleConnections()
-
-	res, err := client.Do(request)
-
-	if err != nil {
-		http.Error(w, "Error in getting response from "+apiName+" API",
-			http.StatusInternalServerError)
-		return nil
-	}
-	return res
 }
 
 func GetParamFromRequestURL(r *http.Request, desiredLen int) string {
