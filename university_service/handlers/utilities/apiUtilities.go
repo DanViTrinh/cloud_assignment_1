@@ -39,13 +39,15 @@ func getResponseFromApi(w http.ResponseWriter,
 		return nil
 	}
 
-	q := request.URL.Query()
+	if params != nil {
+		q := request.URL.Query()
 
-	for key, val := range *params {
-		q.Add(key, val)
+		for key, val := range *params {
+			q.Add(key, val)
+		}
+
+		request.URL.RawQuery = q.Encode()
 	}
-
-	request.URL.RawQuery = q.Encode()
 
 	// request.Header.Add("content-type", "application/json")
 	client := &http.Client{}

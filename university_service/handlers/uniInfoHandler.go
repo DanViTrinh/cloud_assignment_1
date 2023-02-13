@@ -27,6 +27,27 @@ func handleGetUniInfo(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	//TODO: change implementation, weird.
+	//PROBLEM: the response from the api is a single item array
+	countryApiName := "rest countries"
+	for index, uni := range unisFound {
+		countryApiUrl := utilities.CountriesAPIurl +
+			utilities.CountriesAlphaCode + "/" + uni.IsoCode
+		singleUniArray := []struct {
+			WebPages  []string          `json:"webpages,omitempty"`
+			Languages map[string]string `json:"languages,omitempty"`
+			Maps      map[string]string `json:"maps,omitempty"`
+		}{}
+
+		if !utilities.GetResponseAndPopulateData(w, countryApiUrl,
+			countryApiName, nil, &singleUniArray) {
+			return
+		}
+		unisFound[index].WebPages = singleUniArray[0].WebPages
+		unisFound[index].Languages = singleUniArray[0].Languages
+		unisFound[index].Maps = singleUniArray[0].Maps[utilities.DesiredMap]
+	}
+
 	if !utilities.MarshalAndDisplayData(w, unisFound) {
 		return
 	}

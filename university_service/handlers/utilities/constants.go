@@ -12,7 +12,8 @@ const UniversitiesAPIurl = "http://localhost:8082"
 const UniversitiesSearch = "/search"
 
 // countries api
-const CountriesAPIurl = "localhost:8081/v3.1"
+const CountriesAPIurl = "http://localhost:8081/v3.1"
 const CountriesName = "/name"
 const CountriesAlphaCode = "/alpha"
 const CountriesSubregion = "/subregion"
+const DesiredMap string = "openStreetMaps"

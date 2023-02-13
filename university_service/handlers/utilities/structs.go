@@ -6,7 +6,7 @@ type University struct {
 	Name      string            `json:"name"`
 	WebPages  []string          `json:"webpages,omitempty"`
 	Languages map[string]string `json:"languages,omitempty"`
-	Maps      []string          `json:"maps,omitempty"`
+	Maps      string            `json:"maps,omitempty"`
 }
 
 /*
