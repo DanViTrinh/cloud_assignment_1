@@ -7,7 +7,12 @@ type University struct {
 	Name      string            `json:"name"`
 	WebPages  []string          `json:"web_pages"`
 	Languages map[string]string `json:"languages,omitempty"`
-	Maps      string            `json:"maps,omitempty"`
+	Map       string            `json:"maps,omitempty"`
+}
+
+type MissingFieldsFromCountry struct {
+	Languages map[string]string
+	Maps      map[string]string
 }
 
 /*

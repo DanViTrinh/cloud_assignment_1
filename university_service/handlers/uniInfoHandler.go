@@ -30,20 +30,30 @@ func handleGetUniInfo(w http.ResponseWriter, r *http.Request) {
 	//TODO: change implementation, weird.
 	//PROBLEM: the response from the api is a single item array
 	countryApiName := "rest countries"
+	foundCountries := make(map[string][]utilities.MissingFieldsFromCountry)
 	for index, uni := range unisFound {
-		countryApiUrl := utilities.CountriesAPIurl +
-			utilities.CountriesAlphaCode + "/" + uni.IsoCode
-		singleUniArray := []struct {
-			Languages map[string]string `json:"languages,omitempty"`
-			Maps      map[string]string `json:"maps,omitempty"`
-		}{}
 
-		if !utilities.GetResponseAndPopulateData(w, countryApiUrl,
-			countryApiName, nil, &singleUniArray) {
-			return
+		singleCountryArray, ok := foundCountries[uni.IsoCode]
+
+		if ok {
+			unisFound[index].Languages = singleCountryArray[0].Languages
+			unisFound[index].Map =
+				singleCountryArray[0].Maps[utilities.DesiredMap]
+		} else {
+			countryApiUrl := utilities.CountriesAPIurl +
+				utilities.CountriesAlphaCode + "/" + uni.IsoCode
+
+			var singleUniArray []utilities.MissingFieldsFromCountry
+
+			if !utilities.GetResponseAndPopulateData(w, countryApiUrl,
+				countryApiName, nil, &singleUniArray) {
+				return
+			}
+			unisFound[index].Languages = singleUniArray[0].Languages
+			unisFound[index].Map = singleUniArray[0].Maps[utilities.DesiredMap]
+
+			foundCountries[uni.IsoCode] = singleUniArray
 		}
-		unisFound[index].Languages = singleUniArray[0].Languages
-		unisFound[index].Maps = singleUniArray[0].Maps[utilities.DesiredMap]
 	}
 
 	if !utilities.MarshalAndDisplayData(w, unisFound) {
