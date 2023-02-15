@@ -27,6 +27,7 @@ func handleGetUniInfo(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	//TODO: make a general function for neighbour uni
 	//TODO: change implementation, weird.
 	//PROBLEM: the response from the api is a single item array
 	countryApiName := "rest countries"
