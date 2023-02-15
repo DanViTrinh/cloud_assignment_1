@@ -24,6 +24,11 @@ func main() {
 	//TODO: TEST if it works without the /
 	http.HandleFunc(utilities.UniInfoPath+"/", handlers.UniInfoHandler)
 
+	http.HandleFunc(utilities.NeighbourUnisPath,
+		handlers.NeighbourUniHandler)
+	http.HandleFunc(utilities.NeighbourUnisPath+"/",
+		handlers.NeighbourUniHandler)
+
 	log.Println("Listening on port " + port)
 	log.Fatal(http.ListenAndServe(":"+port, nil))
 

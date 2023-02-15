@@ -40,12 +40,12 @@ func handleGetUniInfo(w http.ResponseWriter, r *http.Request) {
 			unisFound[index].Map =
 				singleCountryArray[0].Maps[utilities.DesiredMap]
 		} else {
-			countryApiUrl := utilities.CountriesAPIurl +
+			countryApiUrlWithCode := utilities.CountriesAPIurl +
 				utilities.CountriesAlphaCode + "/" + uni.IsoCode
 
 			var singleUniArray []utilities.MissingFieldsFromCountry
 
-			if !utilities.GetResponseAndPopulateData(w, countryApiUrl,
+			if !utilities.GetResponseAndPopulateData(w, countryApiUrlWithCode,
 				countryApiName, nil, &singleUniArray) {
 				return
 			}
