@@ -34,7 +34,6 @@ func handleGetUniInfo(w http.ResponseWriter, r *http.Request) {
 		countryApiUrl := utilities.CountriesAPIurl +
 			utilities.CountriesAlphaCode + "/" + uni.IsoCode
 		singleUniArray := []struct {
-			WebPages  []string          `json:"webpages,omitempty"`
 			Languages map[string]string `json:"languages,omitempty"`
 			Maps      map[string]string `json:"maps,omitempty"`
 		}{}
@@ -43,7 +42,6 @@ func handleGetUniInfo(w http.ResponseWriter, r *http.Request) {
 			countryApiName, nil, &singleUniArray) {
 			return
 		}
-		unisFound[index].WebPages = singleUniArray[0].WebPages
 		unisFound[index].Languages = singleUniArray[0].Languages
 		unisFound[index].Maps = singleUniArray[0].Maps[utilities.DesiredMap]
 	}
