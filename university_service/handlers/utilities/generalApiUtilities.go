@@ -1,10 +1,9 @@
 package utilities
 
-//TODO:change io/ioutill since deprecated
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"strings"
 )
@@ -12,7 +11,7 @@ import (
 func populateDataWithResponse(w http.ResponseWriter, res *http.Response,
 	apiName string, data interface{}) bool {
 
-	body, err := ioutil.ReadAll(res.Body)
+	body, err := io.ReadAll(res.Body)
 
 	if err != nil {
 		http.Error(w, "Error during reading response",
