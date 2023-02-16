@@ -22,16 +22,16 @@ func main() {
 	}
 
 	// Handler endpoints
-	http.HandleFunc(utilities.DefaultPath, handlers.EmptyHandler)
+	http.Handle(utilities.DefaultPath, handlers.RootHandler(handlers.EmptyHandler))
 
-	http.HandleFunc(utilities.UniInfoPath, handlers.UniInfoHandler)
+	http.Handle(utilities.UniInfoPath, handlers.RootHandler(handlers.UniInfoHandler))
 	//TODO: TEST if it works without the /
-	http.HandleFunc(utilities.UniInfoPath+"/", handlers.UniInfoHandler)
+	http.Handle(utilities.UniInfoPath+"/", handlers.RootHandler(handlers.UniInfoHandler))
 
-	http.HandleFunc(utilities.NeighbourUnisPath,
-		handlers.NeighbourUniHandler)
-	http.HandleFunc(utilities.NeighbourUnisPath+"/",
-		handlers.NeighbourUniHandler)
+	http.Handle(utilities.NeighbourUnisPath,
+		handlers.RootHandler(handlers.NeighbourUniHandler))
+	http.Handle(utilities.NeighbourUnisPath+"/",
+		handlers.RootHandler(handlers.NeighbourUniHandler))
 
 	log.Println("Listening on port " + port)
 	log.Fatal(http.ListenAndServe(":"+port, nil))

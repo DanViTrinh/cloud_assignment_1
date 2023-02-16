@@ -62,7 +62,7 @@ func handleGetUniInfo(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func UniInfoHandler(w http.ResponseWriter, r *http.Request) {
+func UniInfoHandler(w http.ResponseWriter, r *http.Request) error {
 	switch r.Method {
 	case http.MethodGet:
 		handleGetUniInfo(w, r)

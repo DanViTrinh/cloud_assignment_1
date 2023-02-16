@@ -5,7 +5,7 @@ import (
 	"university_service/handlers/utilities"
 )
 
-func NeighbourUniHandler(w http.ResponseWriter, r *http.Request) {
+func NeighbourUniHandler(w http.ResponseWriter, r *http.Request) error {
 
 	var borderCountries []utilities.BorderingCountries
 
@@ -19,4 +19,5 @@ func NeighbourUniHandler(w http.ResponseWriter, r *http.Request) {
 	if !utilities.MarshalAndDisplayData(w, &borderCountries) {
 		return
 	}
+
 }

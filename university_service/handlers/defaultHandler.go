@@ -6,7 +6,7 @@ import (
 	"university_service/handlers/utilities"
 )
 
-func EmptyHandler(w http.ResponseWriter, r *http.Request) {
+func EmptyHandler(w http.ResponseWriter, r *http.Request) error {
 	// Ensure interpretation as HTML by client (browser)
 	w.Header().Set("content-type", "text/html")
 
