@@ -1,37 +1,38 @@
 package handlers
 
 import (
+	"fmt"
 	"net/http"
-	"university_service/handlers/utilities"
+	util "university_service/handlers/utilities"
 )
 
 // TODO: optional fix: Sometimes getting duplicate universities from real api
-func handleGetUniInfo(w http.ResponseWriter, r *http.Request) {
-	uniApiUrl := utilities.UniversitiesAPIurl + utilities.UniversitiesSearch
-	uniApiName := "university"
+func handleGetUniInfo(w http.ResponseWriter, r *http.Request) error {
+	uniApiUrl := util.UniversitiesAPIurl + util.UniversitiesSearch
 
-	name := utilities.GetParamFromRequestURL(r, 5)
-	if name == "" {
-		http.Error(w, "Expecting format .../{university_name}",
-			http.StatusBadRequest)
-		return
+	name, err := util.GetParamFromRequestURL(r, 5)
+	if err != nil {
+		return util.NewRestErrorWrapper(err, http.StatusBadRequest,
+			"expecting format .../{university_name}", util.ClientError)
+		// http.Error(w, "Expecting format .../{university_name}",
+		// 	http.StatusBadRequest)
+		// return
 	}
 
 	params := make(map[string]string)
 	params["name"] = name
 
-	var unisFound []utilities.University
+	var unisFound []util.University
 
-	if !utilities.GetResponseAndPopulateData(w, uniApiUrl, uniApiName,
-		&params, &unisFound) {
-		return
+	err = util.GetResponseAndPopulateData(uniApiUrl, &params, &unisFound)
+	if err != nil {
+		return err
 	}
 
 	//TODO: make a general function for neighbour uni
 	//TODO: change implementation, weird.
 	//PROBLEM: the response from the api is a single item array
-	countryApiName := "rest countries"
-	foundCountries := make(map[string][]utilities.MissingFieldsFromCountry)
+	foundCountries := make(map[string][]util.MissingFieldsFromCountry)
 	for index, uni := range unisFound {
 
 		singleCountryArray, ok := foundCountries[uni.IsoCode]
@@ -39,34 +40,40 @@ func handleGetUniInfo(w http.ResponseWriter, r *http.Request) {
 		if ok {
 			unisFound[index].Languages = singleCountryArray[0].Languages
 			unisFound[index].Map =
-				singleCountryArray[0].Maps[utilities.DesiredMap]
+				singleCountryArray[0].Maps[util.DesiredMap]
 		} else {
-			countryApiUrlWithCode := utilities.CountriesAPIurl +
-				utilities.CountriesAlphaCode + "/" + uni.IsoCode
+			countryApiUrlWithCode := util.CountriesAPIurl +
+				util.CountriesAlphaCode + "/" + uni.IsoCode
 
-			var singleUniArray []utilities.MissingFieldsFromCountry
+			var singleUniArray []util.MissingFieldsFromCountry
 
-			if !utilities.GetResponseAndPopulateData(w, countryApiUrlWithCode,
-				countryApiName, nil, &singleUniArray) {
-				return
+			err = util.GetResponseAndPopulateData(countryApiUrlWithCode, nil,
+				&singleUniArray)
+			if err != nil {
+				return err
 			}
+			// if !util.GetResponseAndPopulateData(w, countryApiUrlWithCode,
+			// 	countryApiName, nil, &singleUniArray) {
+			// 	return
+			// }
 			unisFound[index].Languages = singleUniArray[0].Languages
-			unisFound[index].Map = singleUniArray[0].Maps[utilities.DesiredMap]
+			unisFound[index].Map = singleUniArray[0].Maps[util.DesiredMap]
 
 			foundCountries[uni.IsoCode] = singleUniArray
 		}
 	}
 
-	if !utilities.MarshalAndDisplayData(w, unisFound) {
-		return
-	}
+	return util.MarshalAndDisplayData(w, unisFound)
 }
 
 func UniInfoHandler(w http.ResponseWriter, r *http.Request) error {
 	switch r.Method {
 	case http.MethodGet:
-		handleGetUniInfo(w, r)
+		return handleGetUniInfo(w, r)
 	default:
-		http.Error(w, "Method not yet supported ", http.StatusNotImplemented)
+		return util.NewRestErrorWrapper(fmt.Errorf("%s %s", r.Method,
+			util.NotImplementedMsg),
+			http.StatusNotImplemented, util.NotImplementedMsg,
+			util.UnsensitiveServerError)
 	}
 }

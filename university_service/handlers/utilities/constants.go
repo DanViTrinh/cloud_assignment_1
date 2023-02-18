@@ -20,3 +20,6 @@ const CountriesName = "/name"
 const CountriesAlphaCode = "/alpha"
 const CountriesSubregion = "/subregion"
 const DesiredMap string = "openStreetMaps"
+
+const StandardInternalServerErrorMsg = "internal server error, refer to logs"
+const NotImplementedMsg = "method not yet supported"

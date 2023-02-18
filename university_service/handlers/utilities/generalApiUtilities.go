@@ -8,35 +8,35 @@ import (
 	"strings"
 )
 
-func populateDataWithResponse(w http.ResponseWriter, res *http.Response,
-	apiName string, data interface{}) bool {
-
+func populateDataWithResponse(res *http.Response, data interface{}) error {
 	body, err := io.ReadAll(res.Body)
 
 	if err != nil {
-		http.Error(w, "Error during reading response",
-			http.StatusInternalServerError)
-		return false
+		return NewRestErrorWrapper(err, http.StatusInternalServerError,
+			"error during reading response", ServerError)
 	}
 
 	err = json.Unmarshal(body, &data)
 
 	if err != nil {
-		http.Error(w, "Error during unmarshaling from "+apiName+" API",
-			http.StatusInternalServerError)
-		return false
+		return NewRestErrorWrapper(err, http.StatusInternalServerError,
+			"error during unmarshaling ", ServerError)
+		// http.Error(w, "Error during unmarshaling from ",
+		// 	http.StatusInternalServerError)
 	}
-	return true
+	return nil
 }
 
 // TODO: consider using get instead
-func getResponseFromApi(w http.ResponseWriter,
-	apiURL, apiName string, params *map[string]string) *http.Response {
+func getResponseFromApi(apiURL string,
+	params *map[string]string) (*http.Response, error) {
+
 	request, err := http.NewRequest(http.MethodGet, apiURL, nil)
 	if err != nil {
-		http.Error(w, "Error in creating new request to "+apiName+" API",
-			http.StatusInternalServerError)
-		return nil
+		return nil, NewRestErrorWrapper(err, http.StatusInternalServerError,
+			"error in creating new request to "+apiURL, ServerError)
+		// http.Error(w, "Error in creating new request to "+apiURL+" API",
+		// 	http.StatusInternalServerError)
 	}
 
 	if params != nil {
@@ -56,50 +56,59 @@ func getResponseFromApi(w http.ResponseWriter,
 	res, err := client.Do(request)
 
 	if err != nil {
-		http.Error(w, "Error in getting response from "+apiName+" API",
-			http.StatusInternalServerError)
-		return nil
+		return nil, NewRestErrorWrapper(err, http.StatusInternalServerError,
+			"error in getting response from "+apiURL, ServerError)
+		// http.Error(w, "Error in getting response from "+apiName+" API",
+		// 	http.StatusInternalServerError)
+		// return nil
 	}
-	return res
+	return res, nil
 }
 
-func GetResponseAndPopulateData(w http.ResponseWriter, apiURL, apiName string,
-	params *map[string]string, data interface{}) bool {
-	res := getResponseFromApi(w, apiURL, apiName, params)
-	if res == nil {
-		return false
+func GetResponseAndPopulateData(apiURL string,
+	params *map[string]string, data interface{}) error {
+
+	res, err := getResponseFromApi(apiURL, params)
+	if err != nil {
+		return err
 	}
 
-	return populateDataWithResponse(w, res, apiName, &data)
+	return populateDataWithResponse(res, &data)
 }
 
-func MarshalAndDisplayData(w http.ResponseWriter, data interface{}) bool {
+func MarshalAndDisplayData(w http.ResponseWriter, data interface{}) error {
+
 	w.Header().Add("content-type", "application/json")
 
 	jsonEncodedData, err := json.Marshal(data)
 
 	if err != nil {
-		http.Error(w, "Error during marshalling data",
-			http.StatusInternalServerError)
-		return false
+		return NewRestErrorWrapper(err, http.StatusInternalServerError,
+			"error during marshalling data", ServerError)
+		// http.Error(w, "Error during marshalling data",
+		// 	http.StatusInternalServerError)
 	}
 
 	_, err = fmt.Fprint(w, string(jsonEncodedData))
 	if err != nil {
-		http.Error(w, "Error during writing response",
-			http.StatusInternalServerError)
-		return false
+		return NewRestErrorWrapper(err, http.StatusInternalServerError,
+			"error during writing response", ServerError)
+		// http.Error(w, "Error during writing response",
+		// 	http.StatusInternalServerError)
 	}
-	return true
+	return nil
 }
 
-func GetParamFromRequestURL(r *http.Request, desiredLen int) string {
+func GetParamFromRequestURL(r *http.Request, desiredLen int) (string, error) {
 	parts := strings.Split(r.URL.Path, "/")
 
 	if (len(parts) == desiredLen && parts[desiredLen-1] != "") ||
 		(len(parts) == desiredLen+1 && parts[desiredLen-1] != "" &&
 			parts[desiredLen] == "") {
-		return parts[desiredLen-1]
+		return parts[desiredLen-1], nil
 	}
-	return ""
+	return "", fmt.Errorf("expecting a value at: %d in %s",
+		desiredLen, r.URL.Path)
+	// return "", errors.New("Expecting a value at: " + desiredLen + "in " )
+	// string(r.URL.Path))
 }

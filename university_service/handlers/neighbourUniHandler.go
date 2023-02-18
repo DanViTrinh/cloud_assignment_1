@@ -6,18 +6,15 @@ import (
 )
 
 func NeighbourUniHandler(w http.ResponseWriter, r *http.Request) error {
-
 	var borderCountries []utilities.BorderingCountries
 
 	countryApiUrlWithCode := utilities.CountriesAPIurl +
 		utilities.CountriesAlphaCode + "/TEST"
-	if !utilities.GetResponseAndPopulateData(w, countryApiUrlWithCode,
-		"Country", nil, &borderCountries) {
-		return
+	err := utilities.GetResponseAndPopulateData(countryApiUrlWithCode,
+		nil, &borderCountries)
+	if err != nil {
+		return err
 	}
 
-	if !utilities.MarshalAndDisplayData(w, &borderCountries) {
-		return
-	}
-
+	return utilities.MarshalAndDisplayData(w, &borderCountries)
 }

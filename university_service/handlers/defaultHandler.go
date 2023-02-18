@@ -3,7 +3,7 @@ package handlers
 import (
 	"fmt"
 	"net/http"
-	"university_service/handlers/utilities"
+	util "university_service/handlers/utilities"
 )
 
 func EmptyHandler(w http.ResponseWriter, r *http.Request) error {
@@ -12,22 +12,21 @@ func EmptyHandler(w http.ResponseWriter, r *http.Request) error {
 
 	output := "This service does not provide any functionality on root " +
 		"path level. Please use paths " +
-		"<a href=\"" + utilities.UniInfoPath + "\">" +
-		utilities.UniInfoPath +
+		"<a href=\"" + util.UniInfoPath + "\">" +
+		util.UniInfoPath +
 		"</a> or " +
-		"<a href=\"" + utilities.NeighbourUnisPath + "\">" +
-		utilities.NeighbourUnisPath +
+		"<a href=\"" + util.NeighbourUnisPath + "\">" +
+		util.NeighbourUnisPath +
 		"</a> or " +
-		"<a href=\"" + utilities.DiagPath + "\">" +
-		utilities.DiagPath +
+		"<a href=\"" + util.DiagPath + "\">" +
+		util.DiagPath +
 		"</a>."
 
 	// Write output to client
 	_, err := fmt.Fprintf(w, "%v", output)
-
 	if err != nil {
-		http.Error(w, "Error when returning output",
-			http.StatusInternalServerError)
+		return util.NewRestErrorWrapper(err, http.StatusInternalServerError,
+			"Error when returning output", util.ServerError)
 	}
-
+	return nil
 }

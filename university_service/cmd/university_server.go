@@ -4,8 +4,8 @@ import (
 	"log"
 	"net/http"
 	"os"
-	"university_service/handlers"
-	"university_service/handlers/utilities"
+	h "university_service/handlers"
+	u "university_service/handlers/utilities"
 )
 
 //TODO: handle errors better
@@ -22,16 +22,14 @@ func main() {
 	}
 
 	// Handler endpoints
-	http.Handle(utilities.DefaultPath, handlers.RootHandler(handlers.EmptyHandler))
+	http.Handle(u.DefaultPath, h.RootHandler(h.EmptyHandler))
 
-	http.Handle(utilities.UniInfoPath, handlers.RootHandler(handlers.UniInfoHandler))
 	//TODO: TEST if it works without the /
-	http.Handle(utilities.UniInfoPath+"/", handlers.RootHandler(handlers.UniInfoHandler))
+	http.Handle(u.UniInfoPath, h.RootHandler(h.UniInfoHandler))
+	http.Handle(u.UniInfoPath+"/", h.RootHandler(h.UniInfoHandler))
 
-	http.Handle(utilities.NeighbourUnisPath,
-		handlers.RootHandler(handlers.NeighbourUniHandler))
-	http.Handle(utilities.NeighbourUnisPath+"/",
-		handlers.RootHandler(handlers.NeighbourUniHandler))
+	http.Handle(u.NeighbourUnisPath, h.RootHandler(h.NeighbourUniHandler))
+	http.Handle(u.NeighbourUnisPath+"/", h.RootHandler(h.NeighbourUniHandler))
 
 	log.Println("Listening on port " + port)
 	log.Fatal(http.ListenAndServe(":"+port, nil))
