@@ -31,6 +31,7 @@ func handleGetUniInfo(w http.ResponseWriter, r *http.Request) error {
 
 	//TODO: make a general function for neighbour uni
 	//TODO: change implementation, weird.
+	//TODO: make a global foundCountries to lessen api calls
 	//PROBLEM: the response from the api is a single item array
 	foundCountries := make(map[string][]util.MissingFieldsFromCountry)
 	for index, uni := range unisFound {
