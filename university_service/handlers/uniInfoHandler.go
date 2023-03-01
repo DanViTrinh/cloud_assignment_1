@@ -29,39 +29,10 @@ func handleGetUniInfo(w http.ResponseWriter, r *http.Request) error {
 		return err
 	}
 
-	//TODO: make a general function for neighbour uni
-	//TODO: change implementation, weird.
-	//TODO: make a global foundCountries to lessen api calls
-	//PROBLEM: the response from the api is a single item array
-	foundCountries := make(map[string][]util.MissingFieldsFromCountry)
-	for index, uni := range unisFound {
-
-		singleCountryArray, ok := foundCountries[uni.IsoCode]
-
-		if ok {
-			unisFound[index].Languages = singleCountryArray[0].Languages
-			unisFound[index].Map =
-				singleCountryArray[0].Maps[util.DesiredMap]
-		} else {
-			countryApiUrlWithCode := util.CountriesAPIurl +
-				util.CountriesAlphaCode + "/" + uni.IsoCode
-
-			var singleUniArray []util.MissingFieldsFromCountry
-
-			err = util.GetResponseAndPopulateData(countryApiUrlWithCode, nil,
-				&singleUniArray)
-			if err != nil {
-				return err
-			}
-			// if !util.GetResponseAndPopulateData(w, countryApiUrlWithCode,
-			// 	countryApiName, nil, &singleUniArray) {
-			// 	return
-			// }
-			unisFound[index].Languages = singleUniArray[0].Languages
-			unisFound[index].Map = singleUniArray[0].Maps[util.DesiredMap]
-
-			foundCountries[uni.IsoCode] = singleUniArray
-		}
+	err = util.AddCountryInfoToUnis(&unisFound)
+	//TODO
+	if err != nil {
+		return err
 	}
 
 	return util.MarshalAndDisplayData(w, unisFound)
