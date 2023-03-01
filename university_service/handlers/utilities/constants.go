@@ -9,12 +9,14 @@ const DiagPath = "/unisearcher/v1/diag"
 // universities api
 // real
 // const UniversitiesAPIurl = "http://universities.hipolabs.com"
+// mock
 const UniversitiesAPIurl = "http://localhost:8082"
 const UniversitiesSearch = "/search"
 
 // countries api
 // real
 // const CountriesAPIurl = "https://restcountries.com/v3.1"
+// mock
 const CountriesAPIurl = "http://localhost:8081/v3.1"
 const CountriesName = "/name"
 const CountriesAlphaCode = "/alpha"

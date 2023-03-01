@@ -25,10 +25,7 @@ func AddCountryInfoToUnis(unis *[]University) error {
 			if err != nil {
 				return err
 			}
-			// if !util.GetResponseAndPopulateData(w, countryApiUrlWithCode,
-			// 	countryApiName, nil, &singleUniArray) {
-			// 	return
-			// }
+
 			(*unis)[index].Languages = singleUniArray[0].Languages
 			(*unis)[index].Map = singleUniArray[0].Maps[DesiredMap]
 
