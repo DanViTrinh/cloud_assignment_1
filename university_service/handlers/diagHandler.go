@@ -6,6 +6,7 @@ import (
 	u "university_service/handlers/utilities"
 )
 
+// Starts time at the beggining of service
 var startTime time.Time = time.Now()
 
 func uptimeInSeconds() time.Duration {
