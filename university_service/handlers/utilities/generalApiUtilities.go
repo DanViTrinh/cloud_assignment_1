@@ -21,10 +21,7 @@ func GetResponseFromApi(apiURL string) (*http.Response, error) {
 	return res, nil
 }
 
-// TODO: DEBATE: to send in params or concatenate string
-// TODO: or send in a request?
-// Gets response from api url with parameters.
-// Popupulates data with the response
+// Gets response from api url Popupulates data with the response
 func FillDataWithResponse(apiURL string, data interface{}) error {
 
 	res, err := GetResponseFromApi(apiURL)
@@ -49,7 +46,8 @@ func FillDataWithResponse(apiURL string, data interface{}) error {
 	return nil
 }
 
-func MarshalAndDisplayData(w http.ResponseWriter, data interface{}) error {
+// display a json object through writer
+func DisplayData(w http.ResponseWriter, data interface{}) error {
 
 	w.Header().Add("content-type", "application/json")
 

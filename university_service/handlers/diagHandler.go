@@ -31,5 +31,5 @@ func DiagHandler(w http.ResponseWriter, r *http.Request) error {
 
 	diagInfo.Uptime = time.Since(startTime) / u.NanoSecondsInAsecond
 
-	return u.MarshalAndDisplayData(w, diagInfo)
+	return u.DisplayData(w, diagInfo)
 }

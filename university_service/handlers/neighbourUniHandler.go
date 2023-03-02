@@ -150,5 +150,5 @@ func NeighbourUniHandler(w http.ResponseWriter, r *http.Request) error {
 
 	// TODO MAKE PROPER LIMIT TO REDUCE API CALLS LATER
 
-	return util.MarshalAndDisplayData(w, &finalUnis)
+	return util.DisplayData(w, &finalUnis)
 }

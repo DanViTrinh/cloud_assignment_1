@@ -14,13 +14,7 @@ func handleGetUniInfo(w http.ResponseWriter, r *http.Request) error {
 	if err != nil {
 		return util.NewRestErrorWrapper(err, http.StatusBadRequest,
 			"expecting format .../{university_name}", util.ClientError)
-		// http.Error(w, "Expecting format .../{university_name}",
-		// 	http.StatusBadRequest)
-		// return
 	}
-
-	// params := make(map[string]string)
-	// params["name"] = name
 
 	uniApiUrl, err := url.Parse(util.UniAPI + util.UniSearch)
 	if err != nil {
@@ -43,7 +37,7 @@ func handleGetUniInfo(w http.ResponseWriter, r *http.Request) error {
 		return err
 	}
 
-	return util.MarshalAndDisplayData(w, unisFound)
+	return util.DisplayData(w, unisFound)
 }
 
 func UniInfoHandler(w http.ResponseWriter, r *http.Request) error {
