@@ -9,10 +9,8 @@ import (
 // Starts time at the beggining of service
 var startTime time.Time = time.Now()
 
-func uptimeInSeconds() time.Duration {
-	return time.Since(startTime) / u.NanoSecondsInAsecond
-}
-
+// TODO: Debate: what to do when the service is down and unavailable
+// TODO: should i set a default status code instead if error occured
 func DiagHandler(w http.ResponseWriter, r *http.Request) error {
 
 	var diagInfo u.DiagInfo
@@ -31,7 +29,7 @@ func DiagHandler(w http.ResponseWriter, r *http.Request) error {
 
 	diagInfo.Version = u.Version
 
-	diagInfo.Uptime = uptimeInSeconds()
+	diagInfo.Uptime = time.Since(startTime) / u.NanoSecondsInAsecond
 
 	return u.MarshalAndDisplayData(w, diagInfo)
 }
