@@ -17,8 +17,6 @@ func GetResponseFromApi(apiURL string,
 	if err != nil {
 		return nil, NewRestErrorWrapper(err, http.StatusInternalServerError,
 			"error in creating new request to "+apiURL, ServerError)
-		// http.Error(w, "Error in creating new request to "+apiURL+" API",
-		// 	http.StatusInternalServerError)
 	}
 
 	if params != nil {
@@ -41,13 +39,14 @@ func GetResponseFromApi(apiURL string,
 	if err != nil {
 		return nil, NewRestErrorWrapper(err, http.StatusInternalServerError,
 			"error in getting response from "+apiURL, ServerError)
-		// http.Error(w, "Error in getting response from "+apiName+" API",
-		// 	http.StatusInternalServerError)
-		// return nil
 	}
 	return res, nil
 }
 
+// TODO: DEBATE: to send in params or concatenate string
+// TODO: or send in a request?
+// TODO: https://stackoverflow.com/questions/30652577/go-doing-a-get-request-and-building-the-querystring
+// TODO: https://go.dev/play/p/YCTvdluws-r
 // Gets response from api url with parameters.
 // Popupulates data with the response
 func GetResponseAndPopulateData(apiURL string,
@@ -58,6 +57,7 @@ func GetResponseAndPopulateData(apiURL string,
 		return err
 	}
 
+	defer res.Body.Close()
 	body, err := io.ReadAll(res.Body)
 
 	if err != nil {
@@ -93,6 +93,7 @@ func MarshalAndDisplayData(w http.ResponseWriter, data interface{}) error {
 	return nil
 }
 
+// TODO: necessary
 func GetParamFromRequestURL(r *http.Request, desiredLen int) (string, error) {
 	parts := strings.Split(r.URL.Path, "/")
 
