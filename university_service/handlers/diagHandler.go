@@ -10,7 +10,7 @@ import (
 var startTime time.Time = time.Now()
 
 // TODO: Debate: what to do when the service is down and unavailable
-// TODO: should i set a default status code instead if error occured
+// should i set a default status code instead of returning if error occured
 func DiagHandler(w http.ResponseWriter, r *http.Request) error {
 
 	var diagInfo u.DiagInfo
