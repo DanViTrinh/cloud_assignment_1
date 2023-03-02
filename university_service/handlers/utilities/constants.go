@@ -31,7 +31,7 @@ const CountryCode = "/alpha"
 const CountrySubregion = "/subregion"
 const DesiredMap string = "openStreetMaps"
 
-const StandardInternalServerErrorMsg = "internal server error, refer to logs"
+const InternalErrMsg = "internal server error, refer to logs"
 const NotImplementedMsg = "method not yet supported"
 
 const NanoSecondsInAsecond = 1000000000

@@ -26,14 +26,12 @@ func (fn RootHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, restErr.Message, restErr.StatusCode)
 		default:
 			log.Println(restErr.Message)
-			http.Error(w, util.StandardInternalServerErrorMsg,
-				restErr.StatusCode)
+			http.Error(w, util.InternalErrMsg, restErr.StatusCode)
 		}
 		log.Printf("Cause of Error: %v", restErr.OriginalError)
 		return
 	}
 
 	log.Printf("Unexpected error type, original error: %v", err)
-	http.Error(w, util.StandardInternalServerErrorMsg,
-		http.StatusInternalServerError)
+	http.Error(w, util.InternalErrMsg, http.StatusInternalServerError)
 }
