@@ -24,7 +24,6 @@ func main() {
 	// Handler endpoints
 	http.Handle(u.DefaultPath, h.RootHandler(h.EmptyHandler))
 
-	//TODO: TEST if it works without the /
 	http.Handle(u.UniInfoPath, h.RootHandler(h.UniInfoHandler))
 	http.Handle(u.UniInfoPath+"/", h.RootHandler(h.UniInfoHandler))
 
