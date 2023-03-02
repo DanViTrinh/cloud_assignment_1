@@ -28,7 +28,7 @@ func populateDataWithResponse(res *http.Response, data interface{}) error {
 }
 
 // TODO: consider using get instead
-func getResponseFromApi(apiURL string,
+func GetResponseFromApi(apiURL string,
 	params *map[string]string) (*http.Response, error) {
 
 	request, err := http.NewRequest(http.MethodGet, apiURL, nil)
@@ -68,7 +68,7 @@ func getResponseFromApi(apiURL string,
 func GetResponseAndPopulateData(apiURL string,
 	params *map[string]string, data interface{}) error {
 
-	res, err := getResponseFromApi(apiURL, params)
+	res, err := GetResponseFromApi(apiURL, params)
 	if err != nil {
 		return err
 	}

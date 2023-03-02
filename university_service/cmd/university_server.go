@@ -31,6 +31,9 @@ func main() {
 	http.Handle(u.NeighbourUnisPath, h.RootHandler(h.NeighbourUniHandler))
 	http.Handle(u.NeighbourUnisPath+"/", h.RootHandler(h.NeighbourUniHandler))
 
+	http.Handle(u.DiagPath, h.RootHandler(h.DiagHandler))
+	http.Handle(u.DiagPath+"/", h.RootHandler(h.DiagHandler))
+
 	log.Println("Listening on port " + port)
 	log.Fatal(http.ListenAndServe(":"+port, nil))
 

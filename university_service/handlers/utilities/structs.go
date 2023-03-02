@@ -1,5 +1,7 @@
 package utilities
 
+import "time"
+
 // TODO: the name in the example and the name in this struct is not the same
 type University struct {
 	Country   string            `json:"country"`
@@ -24,4 +26,12 @@ type CountryName struct {
 		Common string `json:"common"`
 	} `json:"name"`
 	// AltSpellings []string `json:"altSpellings"`
+}
+
+//diag
+type DiagInfo struct {
+	UniApiStatus     string        `json:"universitiesapi"`
+	CountryApiStatus string        `json:"countriesapi"`
+	Version          string        `json:"version"`
+	Uptime           time.Duration `json:"uptime"`
 }
