@@ -10,31 +10,9 @@ import (
 
 // TODO: consider using get instead
 // Gets a respone from api with url and parameters
-func GetResponseFromApi(apiURL string,
-	params *map[string]string) (*http.Response, error) {
-
-	request, err := http.NewRequest(http.MethodGet, apiURL, nil)
-	if err != nil {
-		return nil, NewRestErrorWrapper(err, http.StatusInternalServerError,
-			"error in creating new request to "+apiURL, ServerError)
-	}
-
-	if params != nil {
-		q := request.URL.Query()
-
-		for key, val := range *params {
-			q.Add(key, val)
-		}
-
-		request.URL.RawQuery = q.Encode()
-	}
-
-	// request.Header.Add("content-type", "application/json")
-	client := &http.Client{}
-	defer client.CloseIdleConnections()
-
-	res, err := client.Do(request)
-
+// necessary?
+func GetResponseFromApi(apiURL string) (*http.Response, error) {
+	res, err := http.Get(apiURL)
 	//TODO check if res is null before returning
 	if err != nil {
 		return nil, NewRestErrorWrapper(err, http.StatusInternalServerError,
@@ -45,14 +23,11 @@ func GetResponseFromApi(apiURL string,
 
 // TODO: DEBATE: to send in params or concatenate string
 // TODO: or send in a request?
-// TODO: https://stackoverflow.com/questions/30652577/go-doing-a-get-request-and-building-the-querystring
-// TODO: https://go.dev/play/p/YCTvdluws-r
 // Gets response from api url with parameters.
 // Popupulates data with the response
-func GetResponseAndPopulateData(apiURL string,
-	params *map[string]string, data interface{}) error {
+func FillDataWithResponse(apiURL string, data interface{}) error {
 
-	res, err := GetResponseFromApi(apiURL, params)
+	res, err := GetResponseFromApi(apiURL)
 	if err != nil {
 		return err
 	}
@@ -93,7 +68,7 @@ func MarshalAndDisplayData(w http.ResponseWriter, data interface{}) error {
 	return nil
 }
 
-// TODO: necessary
+// TODO: necessary?
 func GetParamFromRequestURL(r *http.Request, desiredLen int) (string, error) {
 	parts := strings.Split(r.URL.Path, "/")
 

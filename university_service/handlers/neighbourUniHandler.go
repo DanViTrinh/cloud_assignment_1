@@ -3,6 +3,7 @@ package handlers
 import (
 	"fmt"
 	"net/http"
+	"net/url"
 	"strconv"
 	"strings"
 	util "university_service/handlers/utilities"
@@ -62,14 +63,17 @@ func NeighbourUniHandler(w http.ResponseWriter, r *http.Request) error {
 	var borderCountries []util.BorderingCountries
 
 	// getting country bordering countries
-	countryApiUrlWithCode := util.CountriesAPIurl +
-		util.CountriesName + "/" + searchCountry
-	fullTextParam := map[string]string{
-		"fullText": "true",
+	countryApiUrlWithCode := util.CountryAPI +
+		util.CountryName + "/" + searchCountry
+	base, err := url.Parse(countryApiUrlWithCode)
+	if err != nil {
+		return err
 	}
 
-	err := util.GetResponseAndPopulateData(countryApiUrlWithCode,
-		&fullTextParam, &borderCountries)
+	fullTextParams := url.Values{"fullText": []string{"true"}}
+	base.RawQuery = fullTextParams.Encode()
+
+	err = util.FillDataWithResponse(base.String(), &borderCountries)
 
 	if err != nil {
 		return util.NewRestErrorWrapper(err, http.StatusInternalServerError,
@@ -77,18 +81,17 @@ func NeighbourUniHandler(w http.ResponseWriter, r *http.Request) error {
 	}
 
 	// getting commmon name of the bordering countries
-	var foundCountries []util.CountryName
+	var foundCountries []util.CountryNames
 
 	for i := 0; i < len(borderCountries[0].BorderingCodes); i++ {
 
 		country := borderCountries[0].BorderingCodes[i]
-		countryApiUrlWithCode := util.CountriesAPIurl +
-			util.CountriesAlphaCode + "/" + country
+		countryApiUrlWithCode := util.CountryAPI +
+			util.CountryCode + "/" + country
 
-		var singleCountryArray []util.CountryName
+		var singleCountryArray []util.CountryNames
 
-		err = util.GetResponseAndPopulateData(countryApiUrlWithCode, nil,
-			&singleCountryArray)
+		err = util.FillDataWithResponse(countryApiUrlWithCode, &singleCountryArray)
 
 		// TODO HANDLE PROPER ERRROR
 		if err != nil {
@@ -108,15 +111,21 @@ func NeighbourUniHandler(w http.ResponseWriter, r *http.Request) error {
 
 		country := foundCountries[i]
 
-		uniApiUrl := util.UniversitiesAPIurl +
-			util.UniversitiesSearch
-		params := make(map[string]string)
+		uniApiUrl := util.UniAPI +
+			util.UniSearch
 
-		params["name"] = uniName
-		params["country"] = country.Name.Common
+		base, err := url.Parse(uniApiUrl)
+		if err != nil {
+			return err
+		}
+
+		nameCountryParams := url.Values{}
+		nameCountryParams.Add("name", uniName)
+		nameCountryParams.Add("country", country.Name.Common)
+		base.RawQuery = nameCountryParams.Encode()
+
 		var foundUnis []util.University
-		err := util.GetResponseAndPopulateData(uniApiUrl,
-			&params, &foundUnis)
+		err = util.FillDataWithResponse(base.String(), &foundUnis)
 
 		// TODO
 		if err != nil {

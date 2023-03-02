@@ -15,13 +15,13 @@ func DiagHandler(w http.ResponseWriter, r *http.Request) error {
 
 	var diagInfo u.DiagInfo
 
-	respUni, err := u.GetResponseFromApi(u.UniversitiesAPIurl, nil)
+	respUni, err := u.GetResponseFromApi(u.UniAPI)
 	if err != nil {
 		return err
 	}
 	diagInfo.UniApiStatus = respUni.Status
 
-	respCountry, err := u.GetResponseFromApi(u.UniversitiesAPIurl, nil)
+	respCountry, err := u.GetResponseFromApi(u.UniAPI)
 	if err != nil {
 		return err
 	}

@@ -21,7 +21,7 @@ type BorderingCountries struct {
 	BorderingCodes []string `json:"borders,omitempty"`
 }
 
-type CountryName struct {
+type CountryNames struct {
 	Name struct {
 		Common string `json:"common"`
 	} `json:"name"`

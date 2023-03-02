@@ -14,9 +14,9 @@ const DiagPath = "/unisearcher/v1/diag"
 // const UniversitiesAPIurl = "http://universities.hipolabs.com"
 
 // mock
-const UniversitiesAPIurl = "http://localhost:8082"
+const UniAPI = "http://localhost:8082"
 
-const UniversitiesSearch = "/search"
+const UniSearch = "/search"
 
 // countries api
 
@@ -24,11 +24,11 @@ const UniversitiesSearch = "/search"
 // const CountriesAPIurl = "https://restcountries.com/v3.1"
 
 // mock
-const CountriesAPIurl = "http://localhost:8081/v3.1"
+const CountryAPI = "http://localhost:8081/v3.1"
 
-const CountriesName = "/name"
-const CountriesAlphaCode = "/alpha"
-const CountriesSubregion = "/subregion"
+const CountryName = "/name"
+const CountryCode = "/alpha"
+const CountrySubregion = "/subregion"
 const DesiredMap string = "openStreetMaps"
 
 const StandardInternalServerErrorMsg = "internal server error, refer to logs"

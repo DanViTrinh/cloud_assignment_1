@@ -15,13 +15,12 @@ func AddCountryInfoToUnis(unis *[]University) error {
 			(*unis)[index].Map =
 				singleCountryArray[0].Maps[DesiredMap]
 		} else {
-			countryApiUrlWithCode := CountriesAPIurl +
-				CountriesAlphaCode + "/" + uni.IsoCode
+			countryApiUrlWithCode := CountryAPI +
+				CountryCode + "/" + uni.IsoCode
 
 			var singleUniArray []MissingFieldsFromCountry
 
-			err := GetResponseAndPopulateData(countryApiUrlWithCode, nil,
-				&singleUniArray)
+			err := FillDataWithResponse(countryApiUrlWithCode, &singleUniArray)
 			if err != nil {
 				return err
 			}

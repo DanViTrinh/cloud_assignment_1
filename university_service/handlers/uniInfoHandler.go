@@ -3,12 +3,12 @@ package handlers
 import (
 	"fmt"
 	"net/http"
+	"net/url"
 	util "university_service/handlers/utilities"
 )
 
 // TODO: optional fix: Sometimes getting duplicate universities from real api
 func handleGetUniInfo(w http.ResponseWriter, r *http.Request) error {
-	uniApiUrl := util.UniversitiesAPIurl + util.UniversitiesSearch
 
 	name, err := util.GetParamFromRequestURL(r, 5)
 	if err != nil {
@@ -19,12 +19,20 @@ func handleGetUniInfo(w http.ResponseWriter, r *http.Request) error {
 		// return
 	}
 
-	params := make(map[string]string)
-	params["name"] = name
+	// params := make(map[string]string)
+	// params["name"] = name
+
+	uniApiUrl, err := url.Parse(util.UniAPI + util.UniSearch)
+	if err != nil {
+		return err
+	}
+
+	params := url.Values{"name": []string{name}}
+	uniApiUrl.RawQuery = params.Encode()
 
 	var unisFound []util.University
 
-	err = util.GetResponseAndPopulateData(uniApiUrl, &params, &unisFound)
+	err = util.FillDataWithResponse(uniApiUrl.String(), &unisFound)
 	if err != nil {
 		return err
 	}
