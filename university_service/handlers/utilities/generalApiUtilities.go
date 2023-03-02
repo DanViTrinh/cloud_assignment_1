@@ -8,26 +8,8 @@ import (
 	"strings"
 )
 
-func populateDataWithResponse(res *http.Response, data interface{}) error {
-	body, err := io.ReadAll(res.Body)
-
-	if err != nil {
-		return NewRestErrorWrapper(err, http.StatusInternalServerError,
-			"error during reading response", ServerError)
-	}
-
-	err = json.Unmarshal(body, &data)
-
-	if err != nil {
-		return NewRestErrorWrapper(err, http.StatusInternalServerError,
-			"error during unmarshaling ", ServerError)
-		// http.Error(w, "Error during unmarshaling from ",
-		// 	http.StatusInternalServerError)
-	}
-	return nil
-}
-
 // TODO: consider using get instead
+// Gets a respone from api with url and parameters
 func GetResponseFromApi(apiURL string,
 	params *map[string]string) (*http.Response, error) {
 
@@ -55,6 +37,7 @@ func GetResponseFromApi(apiURL string,
 
 	res, err := client.Do(request)
 
+	//TODO check if res is null before returning
 	if err != nil {
 		return nil, NewRestErrorWrapper(err, http.StatusInternalServerError,
 			"error in getting response from "+apiURL, ServerError)
@@ -65,6 +48,8 @@ func GetResponseFromApi(apiURL string,
 	return res, nil
 }
 
+// Gets response from api url with parameters.
+// Popupulates data with the response
 func GetResponseAndPopulateData(apiURL string,
 	params *map[string]string, data interface{}) error {
 
@@ -73,7 +58,20 @@ func GetResponseAndPopulateData(apiURL string,
 		return err
 	}
 
-	return populateDataWithResponse(res, &data)
+	body, err := io.ReadAll(res.Body)
+
+	if err != nil {
+		return NewRestErrorWrapper(err, http.StatusInternalServerError,
+			"error during reading response", ServerError)
+	}
+
+	err = json.Unmarshal(body, &data)
+
+	if err != nil {
+		return NewRestErrorWrapper(err, http.StatusInternalServerError,
+			"error during unmarshaling ", ServerError)
+	}
+	return nil
 }
 
 func MarshalAndDisplayData(w http.ResponseWriter, data interface{}) error {
@@ -85,16 +83,12 @@ func MarshalAndDisplayData(w http.ResponseWriter, data interface{}) error {
 	if err != nil {
 		return NewRestErrorWrapper(err, http.StatusInternalServerError,
 			"error during marshalling data", ServerError)
-		// http.Error(w, "Error during marshalling data",
-		// 	http.StatusInternalServerError)
 	}
 
 	_, err = fmt.Fprint(w, string(jsonEncodedData))
 	if err != nil {
 		return NewRestErrorWrapper(err, http.StatusInternalServerError,
 			"error during writing response", ServerError)
-		// http.Error(w, "Error during writing response",
-		// 	http.StatusInternalServerError)
 	}
 	return nil
 }
@@ -109,6 +103,4 @@ func GetParamFromRequestURL(r *http.Request, desiredLen int) (string, error) {
 	}
 	return "", fmt.Errorf("expecting a value at: %d in %s",
 		desiredLen, r.URL.Path)
-	// return "", errors.New("Expecting a value at: " + desiredLen + "in " )
-	// string(r.URL.Path))
 }
