@@ -8,23 +8,9 @@ import (
 	"strings"
 )
 
-// TODO: consider using get instead
-// Gets a respone from api with url and parameters
-// necessary?
-func GetResponseFromApi(apiURL string) (*http.Response, error) {
-	res, err := http.Get(apiURL)
-	//TODO check if res is null before returning
-	if err != nil {
-		return nil, NewRestErrorWrapper(err, http.StatusInternalServerError,
-			"error in getting response from "+apiURL, ServerError)
-	}
-	return res, nil
-}
-
 // Gets response from api url Popupulates data with the response
-func FillDataWithResponse(apiURL string, data interface{}) error {
-
-	res, err := GetResponseFromApi(apiURL)
+func FillDataFromApi(apiURL string, data interface{}) error {
+	res, err := http.Get(apiURL)
 	if err != nil {
 		return err
 	}
@@ -46,7 +32,8 @@ func FillDataWithResponse(apiURL string, data interface{}) error {
 	return nil
 }
 
-// display a json object through writer
+// Display a struct through writer
+// The displayed struct will be displayed as json
 func DisplayData(w http.ResponseWriter, data interface{}) error {
 
 	w.Header().Add("content-type", "application/json")

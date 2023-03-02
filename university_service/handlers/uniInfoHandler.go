@@ -26,7 +26,7 @@ func handleGetUniInfo(w http.ResponseWriter, r *http.Request) error {
 
 	var unisFound []util.University
 
-	err = util.FillDataWithResponse(uniApiUrl.String(), &unisFound)
+	err = util.FillDataFromApi(uniApiUrl.String(), &unisFound)
 	if err != nil {
 		return err
 	}

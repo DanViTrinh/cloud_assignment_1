@@ -1,5 +1,8 @@
 package utilities
 
+//TODO: SUGGESTION: create a error type for client and server
+// instead of using ErrorType
+
 //kind of errors like enum
 type ErrorType int
 

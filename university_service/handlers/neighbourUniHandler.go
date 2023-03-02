@@ -73,7 +73,7 @@ func NeighbourUniHandler(w http.ResponseWriter, r *http.Request) error {
 	fullTextParams := url.Values{"fullText": []string{"true"}}
 	base.RawQuery = fullTextParams.Encode()
 
-	err = util.FillDataWithResponse(base.String(), &borderCountries)
+	err = util.FillDataFromApi(base.String(), &borderCountries)
 
 	if err != nil {
 		return util.NewRestErrorWrapper(err, http.StatusInternalServerError,
@@ -91,7 +91,7 @@ func NeighbourUniHandler(w http.ResponseWriter, r *http.Request) error {
 
 		var singleCountryArray []util.CountryNames
 
-		err = util.FillDataWithResponse(countryApiUrlWithCode, &singleCountryArray)
+		err = util.FillDataFromApi(countryApiUrlWithCode, &singleCountryArray)
 
 		// TODO HANDLE PROPER ERRROR
 		if err != nil {
@@ -125,7 +125,7 @@ func NeighbourUniHandler(w http.ResponseWriter, r *http.Request) error {
 		base.RawQuery = nameCountryParams.Encode()
 
 		var foundUnis []util.University
-		err = util.FillDataWithResponse(base.String(), &foundUnis)
+		err = util.FillDataFromApi(base.String(), &foundUnis)
 
 		// TODO
 		if err != nil {
@@ -147,8 +147,6 @@ func NeighbourUniHandler(w http.ResponseWriter, r *http.Request) error {
 	if err != nil {
 		return err
 	}
-
-	// TODO MAKE PROPER LIMIT TO REDUCE API CALLS LATER
 
 	return util.DisplayData(w, &finalUnis)
 }

@@ -20,7 +20,7 @@ func AddCountryInfoToUnis(unis *[]University) error {
 
 			var singleUniArray []MissingFieldsFromCountry
 
-			err := FillDataWithResponse(countryApiUrlWithCode, &singleUniArray)
+			err := FillDataFromApi(countryApiUrlWithCode, &singleUniArray)
 			if err != nil {
 				return err
 			}
