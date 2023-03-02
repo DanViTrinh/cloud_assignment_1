@@ -1,3 +1,7 @@
 about adding param to url
 https://stackoverflow.com/questions/30652577/go-doing-a-get-request-and-building-the-querystring
 https://go.dev/play/p/YCTvdluws-r
+
+checkout git submodules
+https://git-scm.com/book/en/v2/Git-Tools-Submodules  
+https://render.com/docs/github 
