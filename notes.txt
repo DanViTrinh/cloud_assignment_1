@@ -8,3 +8,4 @@ https://render.com/docs/github
 
 next on agenda: 
 change error handling
+https://medium.com/@ozdemir.zynl/rest-api-error-handling-in-go-behavioral-type-assertion-509d93636afd
