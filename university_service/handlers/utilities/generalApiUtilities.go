@@ -70,7 +70,10 @@ func GetParamFromRequestURL(r *http.Request, desiredLen int) (string, error) {
 // Gets params from url from startParam to the end of param
 // has to check for a matching length. Error will be returned if empty param
 // is found.
-func ParamsFromUrl(r *http.Request, startParam, length int) ([]string, error) {
+// startParam is the index of the param that you want to start with.
+// amount is the amount of params you want out.
+// amount has to be amount from startParam to end of param
+func ParamsFromUrl(r *http.Request, startParam, amount int) ([]string, error) {
 
 	// removes trailing "/"
 	path := strings.TrimSuffix(r.URL.Path, "/")
@@ -80,7 +83,7 @@ func ParamsFromUrl(r *http.Request, startParam, length int) ([]string, error) {
 	if !strings.Contains(path, "//") {
 		parts := strings.Split(strings.TrimSuffix(r.URL.Path, "/"), "/")
 		// checks valid length
-		if len(parts) == length {
+		if len(parts) == startParam+amount {
 			// returns desired params
 			return parts[startParam:], nil
 		}

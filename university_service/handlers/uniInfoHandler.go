@@ -10,7 +10,7 @@ import (
 // TODO: optional fix: Sometimes getting duplicate universities from real api
 func handleGetUniInfo(w http.ResponseWriter, r *http.Request) error {
 
-	name, err := util.GetParamFromRequestURL(r, 5)
+	urlParams, err := util.ParamsFromUrl(r, 4, 1)
 	if err != nil {
 		return util.NewClientError(err, http.StatusBadRequest,
 			"expecting format .../{university_name}")
@@ -21,7 +21,7 @@ func handleGetUniInfo(w http.ResponseWriter, r *http.Request) error {
 		return err
 	}
 
-	params := url.Values{"name": []string{name}}
+	params := url.Values{"name": []string{urlParams[0]}}
 	uniApiUrl.RawQuery = params.Encode()
 
 	var unisFound []util.University
