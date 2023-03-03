@@ -2,6 +2,7 @@ package utilities
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"net/http"
@@ -64,4 +65,26 @@ func GetParamFromRequestURL(r *http.Request, desiredLen int) (string, error) {
 	}
 	return "", fmt.Errorf("expecting a value at: %d in %s",
 		desiredLen, r.URL.Path)
+}
+
+// Gets params from url from startParam to the end of param
+// has to check for a matching length. Error will be returned if empty param
+// is found.
+func ParamsFromUrl(r *http.Request, startParam, length int) ([]string, error) {
+
+	// removes trailing "/"
+	path := strings.TrimSuffix(r.URL.Path, "/")
+
+	// checks for empty params
+	// if it contains "//" there must be one parameter that is empty
+	if !strings.Contains(path, "//") {
+		parts := strings.Split(strings.TrimSuffix(r.URL.Path, "/"), "/")
+		// checks valid length
+		if len(parts) == length {
+			// returns desired params
+			return parts[startParam:], nil
+		}
+	}
+
+	return nil, errors.New("error: invalid url length or empty url params")
 }
