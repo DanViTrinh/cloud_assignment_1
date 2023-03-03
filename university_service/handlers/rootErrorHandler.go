@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"errors"
 	"log"
 	"net/http"
 	util "university_service/handlers/utilities"
@@ -9,29 +8,21 @@ import (
 
 type RootHandler func(http.ResponseWriter, *http.Request) error
 
-// TODO: add better error handling
 func (fn RootHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	err := fn(w, r)
 	if err == nil {
 		return
 	}
 
-	var restErr util.RestErrorWraper
-
-	if errors.As(err, &restErr) {
-		switch restErr.ErrorKind {
-		case util.ClientError:
-			http.Error(w, restErr.Message, restErr.StatusCode)
-		case util.UnsensitiveServerError:
-			http.Error(w, restErr.Message, restErr.StatusCode)
-		default:
-			log.Println(restErr.Message)
-			http.Error(w, util.InternalErrMsg, restErr.StatusCode)
-		}
-		log.Printf("Cause of Error: %v", restErr.OriginalError)
-		return
+	switch e := err.(type) {
+	case util.ClientError:
+		http.Error(w, e.Message, e.StatusCode)
+	case util.ServerError:
+		log.Println(e.DevMessage)
+		http.Error(w, e.UsrMessage, e.StatusCode)
+	default:
+		log.Println("Non rest error:")
+		http.Error(w, util.InternalErrMsg, http.StatusInternalServerError)
 	}
-
-	log.Printf("Unexpected error type, original error: %v", err)
-	http.Error(w, util.InternalErrMsg, http.StatusInternalServerError)
+	log.Println(err.Error())
 }

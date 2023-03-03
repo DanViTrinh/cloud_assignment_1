@@ -1,7 +1,7 @@
 package handlers
 
 import (
-	"fmt"
+	"errors"
 	"net/http"
 	"net/url"
 	util "university_service/handlers/utilities"
@@ -12,8 +12,8 @@ func handleGetUniInfo(w http.ResponseWriter, r *http.Request) error {
 
 	name, err := util.GetParamFromRequestURL(r, 5)
 	if err != nil {
-		return util.NewRestErrorWrapper(err, http.StatusBadRequest,
-			"expecting format .../{university_name}", util.ClientError)
+		return util.NewClientError(err, http.StatusBadRequest,
+			"expecting format .../{university_name}")
 	}
 
 	uniApiUrl, err := url.Parse(util.UniAPI + util.UniSearch)
@@ -45,9 +45,12 @@ func UniInfoHandler(w http.ResponseWriter, r *http.Request) error {
 	case http.MethodGet:
 		return handleGetUniInfo(w, r)
 	default:
-		return util.NewRestErrorWrapper(fmt.Errorf("%s %s", r.Method,
-			util.NotImplementedMsg),
-			http.StatusNotImplemented, util.NotImplementedMsg,
-			util.UnsensitiveServerError)
+		// return util.NewRestErrorWrapper(fmt.Errorf("%s %s", r.Method,
+		// 	util.NotImplementedMsg),
+		// 	http.StatusNotImplemented, util.NotImplementedMsg,
+		// 	util.UnsensitiveServerError)
+		userErrMessage := r.Method + " " + util.NotImplementedMsg
+		return util.NewServerError(errors.New(userErrMessage),
+			http.StatusInternalServerError, userErrMessage, userErrMessage)
 	}
 }

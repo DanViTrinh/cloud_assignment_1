@@ -8,7 +8,7 @@ import (
 	"strings"
 )
 
-// Gets response from api url Popupulates data with the response
+// Gets response from api url Populates data with the response
 func FillDataFromApi(apiURL string, data interface{}) error {
 	res, err := http.Get(apiURL)
 	if err != nil {
@@ -19,15 +19,15 @@ func FillDataFromApi(apiURL string, data interface{}) error {
 	body, err := io.ReadAll(res.Body)
 
 	if err != nil {
-		return NewRestErrorWrapper(err, http.StatusInternalServerError,
-			"error during reading response", ServerError)
+		return NewServerError(err, http.StatusInternalServerError,
+			InternalErrMsg, "error during reading response")
 	}
 
 	err = json.Unmarshal(body, &data)
 
 	if err != nil {
-		return NewRestErrorWrapper(err, http.StatusInternalServerError,
-			"error during unmarshaling ", ServerError)
+		return NewServerError(err, http.StatusInternalServerError,
+			InternalErrMsg, UnmarshalErrMsg)
 	}
 	return nil
 }
@@ -41,14 +41,14 @@ func DisplayData(w http.ResponseWriter, data interface{}) error {
 	jsonEncodedData, err := json.Marshal(data)
 
 	if err != nil {
-		return NewRestErrorWrapper(err, http.StatusInternalServerError,
-			"error during marshalling data", ServerError)
+		return NewServerError(err, http.StatusInternalServerError,
+			InternalErrMsg, UnmarshalErrMsg)
 	}
 
 	_, err = fmt.Fprint(w, string(jsonEncodedData))
 	if err != nil {
-		return NewRestErrorWrapper(err, http.StatusInternalServerError,
-			"error during writing response", ServerError)
+		return NewServerError(err, http.StatusInternalServerError,
+			InternalErrMsg, ResponseErrMsg)
 	}
 	return nil
 }

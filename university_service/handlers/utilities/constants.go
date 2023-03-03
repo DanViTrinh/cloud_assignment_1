@@ -33,5 +33,8 @@ const DesiredMap string = "openStreetMaps"
 
 const InternalErrMsg = "internal server error, refer to logs"
 const NotImplementedMsg = "method not yet supported"
+const UnmarshalErrMsg = "error during marshalling data"
+const ResponseErrMsg = "error during writing response"
+const OutputErrMsg = "error when returning output"
 
 const NanoSecondsInAsecond = 1000000000

@@ -17,15 +17,15 @@ func DiagHandler(w http.ResponseWriter, r *http.Request) error {
 
 	respUni, uniErr := http.Get(u.UniAPI)
 	if uniErr != nil {
-		return u.NewRestErrorWrapper(uniErr, http.StatusInternalServerError,
-			"error in getting response from "+u.UniAPI, u.ServerError)
+		return u.NewServerError(uniErr, http.StatusInternalServerError,
+			u.InternalErrMsg, "error in getting response from uni api")
 	}
 	diagInfo.UniApiStatus = respUni.Status
 
-	// TODO: CHANGE ERROR
-	respCountry, err := http.Get(u.CountryAPI)
-	if err != nil {
-		return err
+	respCountry, countryErr := http.Get(u.CountryAPI)
+	if countryErr != nil {
+		return u.NewServerError(countryErr, http.StatusInternalServerError,
+			u.InternalErrMsg, "error in getting response from country api")
 	}
 	diagInfo.CountryApiStatus = respCountry.Status
 

@@ -1,38 +1,70 @@
 package utilities
 
-//TODO: SUGGESTION: create a error type for client and server
-// instead of using ErrorType
-
-//kind of errors like enum
-type ErrorType int
-
-const (
-	ClientError ErrorType = iota + 1
-	ServerError
-	UnsensitiveServerError
-)
-
-type RestErrorWraper struct {
-	OriginalError error
-	StatusCode    int
-	Message       string
-	ErrorKind     ErrorType
+// Client error
+// OrigErr is the original error
+// StatusCode is the status code to be sent to user
+// Message is message for client
+type ClientError struct {
+	OrigErr    error
+	StatusCode int
+	Message    string
 }
 
-func (e RestErrorWraper) Error() string {
-	return e.OriginalError.Error()
+// returns original error
+func (e ClientError) Error() string {
+
+	return e.OrigErr.Error()
 }
 
-func NewRestErrorWrapper(originalError error, statusCode int,
-	message string, errorType ErrorType) error {
-	return RestErrorWraper{
-		OriginalError: originalError,
-		StatusCode:    statusCode,
-		Message:       message,
-		ErrorKind:     errorType,
+// Creates a new client error rapper for original error
+// origErr is the original error
+// statusCode is the status code to be sent to client
+// msg is message for client
+func NewClientError(origErr error, statusCode int, msg string) error {
+	return ClientError{
+		OrigErr:    origErr,
+		StatusCode: statusCode,
+		Message:    msg,
 	}
 }
 
-func (e RestErrorWraper) Unwrap() error {
-	return e.OriginalError
+// Unwraps to give the original error
+func (e ClientError) Unwrap() error {
+	return e.OrigErr
+}
+
+// Server error
+// OrigErr is the original error
+// StatusCode is the status code to be sent to user
+// UsrMessage is message for client
+// DevMessage is extra message for dev
+type ServerError struct {
+	OrigErr    error
+	StatusCode int
+	UsrMessage string
+	DevMessage string
+}
+
+// returns original error
+func (e ServerError) Error() string {
+	return e.OrigErr.Error()
+}
+
+// Creates a new client error rapper for original error
+// origErr is the original error
+// statusCode is the status code to be sent to client
+// usrMsg is message for user
+// devMsg is extra message for dev
+func NewServerError(origErr error, statusCode int, usrMsg, devMsg string) error {
+	return ServerError{
+		OrigErr:    origErr,
+		StatusCode: statusCode,
+		UsrMessage: usrMsg,
+		DevMessage: devMsg,
+	}
+}
+
+// Unwraps to give the original error
+func (e ServerError) Unwrap() error {
+	return e.OrigErr
 }

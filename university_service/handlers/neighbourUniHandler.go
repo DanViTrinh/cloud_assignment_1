@@ -51,9 +51,8 @@ func NeighbourUniHandler(w http.ResponseWriter, r *http.Request) error {
 		//TODO use atoi and check for neg vals
 		posInt, err := strconv.ParseUint(limit, 10, 0)
 		if err != nil {
-			return util.NewRestErrorWrapper(err,
-				http.StatusBadRequest, "Only positive integers for limit ",
-				util.ClientError)
+			return util.NewClientError(err,
+				http.StatusBadRequest, "Only positive integers for limit")
 		}
 		// todo try avoiding casting
 		limitInt = int(posInt)
@@ -76,11 +75,10 @@ func NeighbourUniHandler(w http.ResponseWriter, r *http.Request) error {
 	err = util.FillDataFromApi(base.String(), &borderCountries)
 
 	if err != nil {
-		return util.NewRestErrorWrapper(err, http.StatusInternalServerError,
-			"Could not get neighbours from countries api", util.ServerError)
+		return err
 	}
 
-	// getting commmon name of the bordering countries
+	// getting common name of the bordering countries
 	var foundCountries []util.CountryNames
 
 	for i := 0; i < len(borderCountries[0].BorderingCodes); i++ {
@@ -93,7 +91,6 @@ func NeighbourUniHandler(w http.ResponseWriter, r *http.Request) error {
 
 		err = util.FillDataFromApi(countryApiUrlWithCode, &singleCountryArray)
 
-		// TODO HANDLE PROPER ERRROR
 		if err != nil {
 			return err
 		}
@@ -127,7 +124,6 @@ func NeighbourUniHandler(w http.ResponseWriter, r *http.Request) error {
 		var foundUnis []util.University
 		err = util.FillDataFromApi(base.String(), &foundUnis)
 
-		// TODO
 		if err != nil {
 			return err
 		}

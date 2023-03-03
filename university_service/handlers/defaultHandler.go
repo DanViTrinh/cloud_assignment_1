@@ -25,8 +25,8 @@ func EmptyHandler(w http.ResponseWriter, r *http.Request) error {
 	// Write output to client
 	_, err := fmt.Fprintf(w, "%v", output)
 	if err != nil {
-		return util.NewRestErrorWrapper(err, http.StatusInternalServerError,
-			"Error when returning output", util.ServerError)
+		return util.NewServerError(err, http.StatusInternalServerError,
+			util.InternalErrMsg, util.OutputErrMsg)
 	}
 	return nil
 }
