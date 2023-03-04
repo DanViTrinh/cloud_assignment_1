@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"errors"
 	"net/http"
 	"net/url"
 	"strconv"
@@ -8,7 +9,17 @@ import (
 )
 
 func NeighborUniHandler(w http.ResponseWriter, r *http.Request) error {
+	switch r.Method {
+	case http.MethodGet:
+		return handleGetNeighborUni(w, r)
+	default:
+		userErrMessage := r.Method + " " + util.NotImplementedMsg
+		return util.NewServerError(errors.New(userErrMessage),
+			http.StatusInternalServerError, userErrMessage, userErrMessage)
+	}
+}
 
+func handleGetNeighborUni(w http.ResponseWriter, r *http.Request) error {
 	// get param parts
 	urlParts, paramErr := util.GetUrlParts(r.URL.Path, 4, 6)
 	if paramErr != nil {

@@ -45,10 +45,6 @@ func UniInfoHandler(w http.ResponseWriter, r *http.Request) error {
 	case http.MethodGet:
 		return handleGetUniInfo(w, r)
 	default:
-		// return util.NewRestErrorWrapper(fmt.Errorf("%s %s", r.Method,
-		// 	util.NotImplementedMsg),
-		// 	http.StatusNotImplemented, util.NotImplementedMsg,
-		// 	util.UnsensitiveServerError)
 		userErrMessage := r.Method + " " + util.NotImplementedMsg
 		return util.NewServerError(errors.New(userErrMessage),
 			http.StatusInternalServerError, userErrMessage, userErrMessage)
