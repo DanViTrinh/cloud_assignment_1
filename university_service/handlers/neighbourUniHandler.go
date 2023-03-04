@@ -59,7 +59,7 @@ func handleGetNeighborUni(w http.ResponseWriter, r *http.Request) error {
 
 		country := foundCountries[i]
 		var foundUnis []util.Uni
-		err := fillUnisFromCountry(country, uniName, &foundUnis, uniApiUrl)
+		err := fillUnisFromCountry(country, uniName, &foundUnis, *uniApiUrl)
 		if err != nil {
 			return err
 		}
@@ -157,7 +157,7 @@ func getCountryNames(countryCodes []string) ([]util.CountryNames, error) {
 
 // fill uni in param with found country unis
 func fillUnisFromCountry(country util.CountryNames, uniName string,
-	unis *[]util.Uni, apiUrl *url.URL) error {
+	unis *[]util.Uni, apiUrl url.URL) error {
 
 	nameCountryParams := url.Values{}
 	nameCountryParams.Add("name", uniName)
