@@ -13,7 +13,8 @@ import (
 func FillDataFromApi(apiURL string, data interface{}) error {
 	res, err := http.Get(apiURL)
 	if err != nil {
-		return err
+		return NewServerError(err, http.StatusInternalServerError,
+			InternalErrMsg, "error in getting response from api")
 	}
 
 	defer res.Body.Close()
