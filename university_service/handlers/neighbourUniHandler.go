@@ -21,7 +21,7 @@ func NeighborUniHandler(w http.ResponseWriter, r *http.Request) error {
 
 func handleGetNeighborUni(w http.ResponseWriter, r *http.Request) error {
 	// get param parts
-	urlParts, paramErr := util.GetUrlParts(r.URL.Path, 4, 6)
+	urlParts, paramErr := util.GetUrlParts(r.URL.Path, 4, 2)
 	if paramErr != nil {
 		return util.NewClientError(paramErr, http.StatusBadRequest,
 			"expecting .../{country_name}/{university_name}")

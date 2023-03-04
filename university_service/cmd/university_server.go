@@ -8,12 +8,8 @@ import (
 	u "university_service/handlers/utilities"
 )
 
-//TODO: handle errors better
-// https://dev.to/tigorlazuardi/go-creating-custom-error-wrapper-and-do-proper-error-equality-check-11k7?fbclid=IwAR1pa3LUFcoRvZoZ8kuGRcrRfTFf_5xWZRqE1Vy9DskYw2MOc9vl_JPWd7Y
-// https://medium.com/@ozdemir.zynl/rest-api-error-handling-in-go-behavioral-type-assertion-509d93636afd
-
 func main() {
-	// Retrieve the potential enviroment variable
+	// Retrieve the potential environment variable
 	port := os.Getenv("PORT")
 	defaultPort := "8083"
 	if port == "" {
@@ -27,8 +23,8 @@ func main() {
 	http.Handle(u.UniInfoPath, h.RootHandler(h.UniInfoHandler))
 	http.Handle(u.UniInfoPath+"/", h.RootHandler(h.UniInfoHandler))
 
-	http.Handle(u.NeighbourUnisPath, h.RootHandler(h.NeighborUniHandler))
-	http.Handle(u.NeighbourUnisPath+"/", h.RootHandler(h.NeighborUniHandler))
+	http.Handle(u.NeighborUnisPath, h.RootHandler(h.NeighborUniHandler))
+	http.Handle(u.NeighborUnisPath+"/", h.RootHandler(h.NeighborUniHandler))
 
 	http.Handle(u.DiagPath, h.RootHandler(h.DiagHandler))
 	http.Handle(u.DiagPath+"/", h.RootHandler(h.DiagHandler))

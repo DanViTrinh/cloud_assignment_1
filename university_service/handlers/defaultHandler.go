@@ -15,8 +15,8 @@ func EmptyHandler(w http.ResponseWriter, r *http.Request) error {
 		"<a href=\"" + util.UniInfoPath + "\">" +
 		util.UniInfoPath +
 		"</a> or " +
-		"<a href=\"" + util.NeighbourUnisPath + "\">" +
-		util.NeighbourUnisPath +
+		"<a href=\"" + util.NeighborUnisPath + "\">" +
+		util.NeighborUnisPath +
 		"</a> or " +
 		"<a href=\"" + util.DiagPath + "\">" +
 		util.DiagPath +

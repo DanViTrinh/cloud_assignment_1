@@ -32,7 +32,7 @@ func handleGetUniInfo(w http.ResponseWriter, r *http.Request) error {
 	}
 
 	err = util.AddCountryInfoToUnis(&unisFound)
-	//TODO
+
 	if err != nil {
 		return err
 	}
