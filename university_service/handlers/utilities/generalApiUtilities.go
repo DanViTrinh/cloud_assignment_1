@@ -77,5 +77,5 @@ func GetUrlParts(url string, startParam, amount int) ([]string, error) {
 		}
 	}
 
-	return nil, errors.New("error: invalid url length or empty url params")
+	return nil, errors.New("invalid url length or empty url params")
 }
