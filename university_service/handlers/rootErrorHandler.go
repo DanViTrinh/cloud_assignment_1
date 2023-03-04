@@ -16,6 +16,7 @@ func (fn RootHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 	switch e := err.(type) {
 	case util.ClientError:
+		log.Println("Client error:")
 		http.Error(w, e.Message, e.StatusCode)
 	case util.ServerError:
 		log.Println(e.DevMessage)
@@ -24,5 +25,6 @@ func (fn RootHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		log.Println("Non rest error:")
 		http.Error(w, util.InternalErrMsg, http.StatusInternalServerError)
 	}
-	log.Println(err.Error())
+	// logs the original error
+	log.Println("\t" + err.Error())
 }
