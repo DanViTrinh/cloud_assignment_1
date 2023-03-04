@@ -54,34 +54,21 @@ func DisplayData(w http.ResponseWriter, data interface{}) error {
 	return nil
 }
 
-// TODO: necessary?
-func GetParamFromRequestURL(r *http.Request, desiredLen int) (string, error) {
-	parts := strings.Split(r.URL.Path, "/")
-
-	if (len(parts) == desiredLen && parts[desiredLen-1] != "") ||
-		(len(parts) == desiredLen+1 && parts[desiredLen-1] != "" &&
-			parts[desiredLen] == "") {
-		return parts[desiredLen-1], nil
-	}
-	return "", fmt.Errorf("expecting a value at: %d in %s",
-		desiredLen, r.URL.Path)
-}
-
 // Gets params from url from startParam to the end of param
 // has to check for a matching length. Error will be returned if empty param
 // is found.
 // startParam is the index of the param that you want to start with.
 // amount is the amount of params you want out.
 // amount has to be amount from startParam to end of param
-func ParamsFromUrl(r *http.Request, startParam, amount int) ([]string, error) {
+func GetUrlParts(url string, startParam, amount int) ([]string, error) {
 
 	// removes trailing "/"
-	path := strings.TrimSuffix(r.URL.Path, "/")
+	path := strings.TrimSuffix(url, "/")
 
 	// checks for empty params
 	// if it contains "//" there must be one parameter that is empty
 	if !strings.Contains(path, "//") {
-		parts := strings.Split(strings.TrimSuffix(r.URL.Path, "/"), "/")
+		parts := strings.Split(strings.TrimSuffix(url, "/"), "/")
 		// checks valid length
 		if len(parts) == startParam+amount {
 			// returns desired params

@@ -1,60 +1,39 @@
 package handlers
 
 import (
-	"fmt"
 	"net/http"
 	"net/url"
 	"strconv"
-	"strings"
 	util "university_service/handlers/utilities"
 )
 
-func GetCountryUniAndLimit(r *http.Request) (map[string]string, error) {
-	parts := strings.Split(r.URL.Path, "/")
-	desiredLen := 6
+func NeighborUniHandler(w http.ResponseWriter, r *http.Request) error {
 
-	params := make(map[string]string)
-
-	//TODO FIX ERROR
-	if len(parts) != desiredLen {
-		return nil, fmt.Errorf("expecting a value at: %d in %s",
-			desiredLen, r.URL.Path)
+	urlParts, paramErr := util.GetUrlParts(r.URL.Path, 4, 6)
+	if paramErr != nil {
+		return util.NewClientError(paramErr, http.StatusBadRequest,
+			"expecting .../{country_name}/{university_name}")
 	}
+	searchCountry := urlParts[0]
+	uniName := urlParts[1]
 
-	params["country"] = parts[desiredLen-2]
-
-	if r.URL.Query().Has("limit") {
-		params["name"] = strings.Split(parts[desiredLen-1], "?")[0]
-		params["limit"] = r.URL.Query().Get("limit")
-	} else {
-		params["name"] = parts[desiredLen-1]
-	}
-	return params, nil
-
-}
-
-func NeighbourUniHandler(w http.ResponseWriter, r *http.Request) error {
-	params, err1 := GetCountryUniAndLimit(r)
-	//TODO
-	if err1 != nil {
-		return err1
-	}
-	searchCountry := params["country"]
-	uniName := params["name"]
-	limit, ok := params["limit"]
-
-	// gettting the limit if available
-	var limitInt int
+	// getting limit if available
 	limitAvailable := false
+	urlParams := r.URL.Query()
+	limitArr, ok := urlParams["limit"]
+	var limitInt int
+
+	if len(limitArr) != 1 {
+		ok = false
+	}
+
 	if ok {
 		// to avoid negative integers
-		//TODO use atoi and check for neg vals
-		posInt, err := strconv.ParseUint(limit, 10, 0)
+		posInt, err := strconv.ParseUint(limitArr[0], 10, 0)
 		if err != nil {
 			return util.NewClientError(err,
 				http.StatusBadRequest, "Only positive integers for limit")
 		}
-		// todo try avoiding casting
 		limitInt = int(posInt)
 		limitAvailable = true
 	}

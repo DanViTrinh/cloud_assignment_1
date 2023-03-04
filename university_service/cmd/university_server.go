@@ -27,8 +27,8 @@ func main() {
 	http.Handle(u.UniInfoPath, h.RootHandler(h.UniInfoHandler))
 	http.Handle(u.UniInfoPath+"/", h.RootHandler(h.UniInfoHandler))
 
-	http.Handle(u.NeighbourUnisPath, h.RootHandler(h.NeighbourUniHandler))
-	http.Handle(u.NeighbourUnisPath+"/", h.RootHandler(h.NeighbourUniHandler))
+	http.Handle(u.NeighbourUnisPath, h.RootHandler(h.NeighborUniHandler))
+	http.Handle(u.NeighbourUnisPath+"/", h.RootHandler(h.NeighborUniHandler))
 
 	http.Handle(u.DiagPath, h.RootHandler(h.DiagHandler))
 	http.Handle(u.DiagPath+"/", h.RootHandler(h.DiagHandler))
