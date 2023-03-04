@@ -1,6 +1,6 @@
 package utilities
 
-func AddCountryInfoToUnis(unis *[]University) error {
+func AddCountryInfoToUnis(unis *[]Uni) error {
 	//TODO: change implementation, weird.
 	//TODO: make a global foundCountries to lessen api calls
 	//PROBLEM: the response from the api is a single item array

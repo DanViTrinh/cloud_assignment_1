@@ -24,7 +24,7 @@ func handleGetUniInfo(w http.ResponseWriter, r *http.Request) error {
 	params := url.Values{"name": []string{urlParams[0]}}
 	uniApiUrl.RawQuery = params.Encode()
 
-	var unisFound []util.University
+	var unisFound []util.Uni
 
 	err = util.FillDataFromApi(uniApiUrl.String(), &unisFound)
 	if err != nil {

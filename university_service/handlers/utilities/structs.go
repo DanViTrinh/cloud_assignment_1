@@ -3,7 +3,7 @@ package utilities
 import "time"
 
 // TODO: the name in the example and the name in this struct is not the same
-type University struct {
+type Uni struct {
 	Country   string            `json:"country"`
 	IsoCode   string            `json:"alpha_two_code"`
 	Name      string            `json:"name"`
@@ -17,7 +17,7 @@ type MissingFieldsFromCountry struct {
 	Maps      map[string]string
 }
 
-type BorderingCountries struct {
+type BorderCountries struct {
 	BorderingCodes []string `json:"borders,omitempty"`
 }
 
