@@ -65,7 +65,9 @@ func handleGetNeighborUni(w http.ResponseWriter, r *http.Request) error {
 		return err
 	}
 
-	var finalUnis []util.Uni
+	// initializes to empty array
+	// if no unis is found empty arr will be displayed
+	finalUnis := []util.Uni{}
 
 	// loop runs through all the unis with name or until
 	// limit amount of unis is found, if limit is available
