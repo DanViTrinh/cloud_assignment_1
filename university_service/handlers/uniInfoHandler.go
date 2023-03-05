@@ -44,7 +44,7 @@ func handleGetUniInfo(w http.ResponseWriter, r *http.Request) error {
 	var unisFound []util.Uni
 
 	// filling unisFound
-	err = util.FillDataFromApi(uniApiUrl.String(), &unisFound)
+	err = util.FillUnisWithURL(uniApiUrl.String(), &unisFound)
 	if err != nil {
 		return err
 	}
