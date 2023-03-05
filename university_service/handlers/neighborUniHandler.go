@@ -130,8 +130,8 @@ func getLimit(r *http.Request) (int, bool, error) {
 //	[]string - a list of the bordering country codes
 //	ServerError - if the operation failed
 func getBorderCodes(searchCountry string) ([]string, error) {
-	var borderCountries []util.BorderCountries
-	// getting country bordering countries
+	var borderCountries []util.Country
+
 	countryApiUrlWithCode := util.CountryAPI +
 		util.CountryName + "/" + searchCountry
 	base, err := url.Parse(countryApiUrlWithCode)
@@ -142,7 +142,7 @@ func getBorderCodes(searchCountry string) ([]string, error) {
 	fullTextParams := url.Values{"fullText": []string{"true"}}
 	base.RawQuery = fullTextParams.Encode()
 
-	err = util.FillDataFromApi(base.String(), &borderCountries)
+	err = util.FillCountriesWithURL(base.String(), &borderCountries)
 
 	if err != nil {
 		return nil, err
@@ -161,8 +161,8 @@ func getBorderCodes(searchCountry string) ([]string, error) {
 //	[]CountryNames - list of country names for each country code
 //					 country names will have the same index as country code
 //	ServerError - if the operation failed
-func getCountryNames(countryCodes []string) ([]util.CountryNames, error) {
-	var foundCountries []util.CountryNames
+func getCountryNames(countryCodes []string) ([]util.Country, error) {
+	var foundCountries []util.Country
 
 	for i := 0; i < len(countryCodes); i++ {
 
@@ -170,9 +170,9 @@ func getCountryNames(countryCodes []string) ([]util.CountryNames, error) {
 		countryApiUrlWithCode := util.CountryAPI +
 			util.CountryCode + "/" + country
 
-		var singleCountryArray []util.CountryNames
+		var singleCountryArray []util.Country
 
-		err := util.FillDataFromApi(countryApiUrlWithCode, &singleCountryArray)
+		err := util.FillCountriesWithURL(countryApiUrlWithCode, &singleCountryArray)
 
 		if err != nil {
 			return nil, err
@@ -190,7 +190,7 @@ func getCountryNames(countryCodes []string) ([]util.CountryNames, error) {
 //	country - the country Name/names to find unis from
 //	uniName - the uni name for searching up uni
 //	unis - a pointer to the unis array to be filled up
-func fillUnisFromCountry(country util.CountryNames, uniName string,
+func fillUnisFromCountry(country util.Country, uniName string,
 	unis *[]util.Uni, apiUrl url.URL) error {
 
 	nameCountryParams := url.Values{}
@@ -198,7 +198,7 @@ func fillUnisFromCountry(country util.CountryNames, uniName string,
 	nameCountryParams.Add("country", country.Name.Common)
 	apiUrl.RawQuery = nameCountryParams.Encode()
 
-	err := util.FillDataFromApi(apiUrl.String(), &unis)
+	err := util.FillUnisWithURL(apiUrl.String(), unis)
 	if err != nil {
 		return err
 	}

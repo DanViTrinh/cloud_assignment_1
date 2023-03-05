@@ -9,36 +9,13 @@ import (
 	"strings"
 )
 
-// Gets response from api url Populates data with the response
-//
-// Parameters:
-//
-//	apiUrl - the url of the api that gets data
-//	data - the data that will be filled
-//
-// Returns:
-//
-//	ServerError - if the call to api fails or fails during marshal of data
-func FillDataFromApi(apiURL string, data interface{}) error {
-	res, err := http.Get(apiURL)
-	if err != nil {
-		return NewServerError(err, http.StatusInternalServerError,
-			InternalErrMsg, "error in getting response from "+apiURL+" :")
-	}
-
-	// if status code is not ok
-	if res.StatusCode != http.StatusOK {
-		err := fmt.Errorf("got status: %d from %s", res.StatusCode, apiURL)
-		return NewServerError(err, http.StatusInternalServerError,
-			InternalErrMsg, "error in getting response from "+apiURL+" :")
-	}
-
+func FillDataWithRes(res *http.Response, data interface{}) error {
 	defer res.Body.Close()
 	body, err := io.ReadAll(res.Body)
 
 	if err != nil {
 		return NewServerError(err, http.StatusInternalServerError,
-			InternalErrMsg, "error during reading response")
+			InternalErrMsg, "error when reading response")
 	}
 
 	err = json.Unmarshal(body, &data)
@@ -48,6 +25,7 @@ func FillDataFromApi(apiURL string, data interface{}) error {
 			InternalErrMsg, UnmarshalErrMsg)
 	}
 	return nil
+
 }
 
 // Display a struct through writer

@@ -32,6 +32,17 @@ type CountryNames struct {
 	// AltSpellings []string `json:"altSpellings"`
 }
 
+// The fields used for country
+type Country struct {
+	Name struct {
+		Common string `json:"common"`
+	} `json:"name"`
+	// AltSpellings []string `json:"altSpellings"`
+	Languages      map[string]string
+	Maps           map[string]string
+	BorderingCodes []string `json:"borders,omitempty"`
+}
+
 // Diagnostics for current api and foreign apis.
 type DiagInfo struct {
 	UniApiStatus     string        `json:"universitiesapi"`

@@ -24,6 +24,9 @@ type ServerError struct {
 	DevMessage string
 }
 
+// Not found error
+// return this error if not found is received from foreign api
+
 // returns original error.Error() for ClientError
 func (e ClientError) Error() string {
 
