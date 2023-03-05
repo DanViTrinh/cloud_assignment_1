@@ -65,7 +65,9 @@ func handleGetNeighborUni(w http.ResponseWriter, r *http.Request) error {
 		return err
 	}
 
-	var finalUnis []util.Uni
+	// initializes to empty array
+	// if no unis is found empty arr will be displayed
+	finalUnis := []util.Uni{}
 
 	// loop runs through all the unis with name or until
 	// limit amount of unis is found, if limit is available
@@ -198,27 +200,4 @@ func getCountriesWithCodes(countryCodes []string) ([]util.Country, error) {
 		foundCountries = append(foundCountries, singleCountryArray[0])
 	}
 	return foundCountries, nil
-}
-
-// Fill unis array with unis from a country
-//
-// Parameters:
-//
-//	country - the country Name/names to find unis from
-//	uniName - the uni name for searching up uni
-//	unis - a pointer to the unis array to be filled up
-func fillUnisFromCountry(country util.Country, uniName string,
-	unis *[]util.Uni, apiUrl url.URL) error {
-
-	nameCountryParams := url.Values{}
-	nameCountryParams.Add("name", uniName)
-	nameCountryParams.Add("country", country.Name.Common)
-	apiUrl.RawQuery = nameCountryParams.Encode()
-
-	err := util.FillUnisWithURL(apiUrl.String(), unis)
-	if err != nil {
-		return err
-	}
-	return nil
-
 }
