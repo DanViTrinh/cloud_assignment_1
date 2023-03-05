@@ -6,6 +6,11 @@ import (
 	util "university_service/handlers/utilities"
 )
 
+// Handler for root level of url.
+//
+// Returns:
+//
+//	ServerError - if failing to give a response
 func EmptyHandler(w http.ResponseWriter, r *http.Request) error {
 	// Ensure interpretation as HTML by client (browser)
 	w.Header().Set("content-type", "text/html")
