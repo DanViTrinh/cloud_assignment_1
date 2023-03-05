@@ -26,8 +26,7 @@ func AddCountryInfoToUnis(unis *[]Uni) error {
 		if ok {
 			(*unis)[index].Languages = singleCountryArray[0].Languages
 			(*unis)[index].Languages = singleCountryArray[0].Languages
-			(*unis)[index].Map =
-				singleCountryArray[0].Maps[DesiredMap]
+			(*unis)[index].Map = singleCountryArray[0].Maps.Map
 		} else {
 			countryApiUrlWithCode := CountryAPI +
 				CountryCode + "/" + uni.IsoCode
@@ -40,7 +39,7 @@ func AddCountryInfoToUnis(unis *[]Uni) error {
 			}
 
 			(*unis)[index].Languages = singleCountryArray[0].Languages
-			(*unis)[index].Map = singleCountryArray[0].Maps[DesiredMap]
+			(*unis)[index].Map = singleCountryArray[0].Maps.Map
 
 			foundCountries[uni.IsoCode] = singleCountryArray
 		}
