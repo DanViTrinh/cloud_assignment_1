@@ -11,20 +11,20 @@ const DiagPath = "/unisearcher/v1/diag"
 // universities api
 
 // real
-// const UniAPI = "http://universities.hipolabs.com"
+const UniAPI = "http://universities.hipolabs.com"
 
 // mock
-const UniAPI = "http://localhost:8082"
+// const UniAPI = "http://localhost:8082"
 
 const UniSearch = "/search"
 
 // countries api
 
 // real
-// const CountryAPI = "https://restcountries.com/v3.1"
+const CountryAPI = "https://restcountries.com/v3.1"
 
 // mock
-const CountryAPI = "http://localhost:8081/v3.1"
+// const CountryAPI = "http://localhost:8081/v3.1"
 
 const CountryName = "/name"
 const CountryCode = "/alpha"

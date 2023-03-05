@@ -23,6 +23,7 @@ type Country struct {
 		Map string `json:"openStreetMaps"`
 	}
 	BorderingCodes []string `json:"borders,omitempty"`
+	Cca2           string   `json:"cca2"`
 }
 
 // Diagnostics for current api and foreign apis.
