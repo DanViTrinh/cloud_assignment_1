@@ -5,7 +5,7 @@ The service provides three different endpoints
 This endpoint retrieves university information from the foreign api's. 
 The service then uses the retrieved information to combine the two api's.
 The endpoint only accepts GET requests. Any other request will be received with
-501 Not implemented status code. If no university was found it will re
+501 Not implemented status code. If no university was found it will display an empty array.
 
 ## .../unisearcher/v1/neighbourunis/
 
