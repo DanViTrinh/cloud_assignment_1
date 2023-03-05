@@ -64,6 +64,10 @@ func checkParam(w http.ResponseWriter, urlPath string,
 			", cannot be empty", status)
 		return false
 	}
+	if parts[desiredLen-1] == "empty" {
+		http.Error(w, "Not found", http.StatusNotFound)
+		return false
+	}
 	return true
 }
 
@@ -85,6 +89,7 @@ func searchName(w http.ResponseWriter, r *http.Request) {
 		} else {
 			outputFile = SeveralCountryFilePath
 		}
+
 		displayFileHandler(w, outputFile)
 
 	default:
