@@ -9,27 +9,7 @@ type Uni struct {
 	Name      string            `json:"name"`
 	WebPages  []string          `json:"web_pages"`
 	Languages map[string]string `json:"languages,omitempty"`
-	// TODO: Change to a struct and get desired map from it instead
-	Map string `json:"maps,omitempty"`
-}
-
-// Extra country information for university
-type MissingFieldsFromCountry struct {
-	Languages map[string]string
-	Maps      map[string]string
-}
-
-// Border codes for neighboring countries
-type BorderCountries struct {
-	BorderingCodes []string `json:"borders,omitempty"`
-}
-
-// The different names for a country
-type CountryNames struct {
-	Name struct {
-		Common string `json:"common"`
-	} `json:"name"`
-	// AltSpellings []string `json:"altSpellings"`
+	Map       string            `json:"maps,omitempty"`
 }
 
 // The fields used for country
@@ -38,9 +18,12 @@ type Country struct {
 		Common string `json:"common"`
 	} `json:"name"`
 	// AltSpellings []string `json:"altSpellings"`
-	Languages      map[string]string
-	Maps           map[string]string
+	Languages map[string]string
+	Maps      struct {
+		Map string `json:"openStreetMaps"`
+	}
 	BorderingCodes []string `json:"borders,omitempty"`
+	Cca2           string   `json:"cca2"`
 }
 
 // Diagnostics for current api and foreign apis.

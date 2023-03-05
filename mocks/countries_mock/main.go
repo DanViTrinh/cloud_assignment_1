@@ -10,7 +10,7 @@ import (
 )
 
 const SingleCountryFilePath string = "./res/norway.json"
-const SeveralCountryFilePath string = "./res/united_countries.json"
+const SeveralCountryFilePath string = "./res/s_countries.json"
 const HandlerNotImplementedMessage string = "Handler not implemented"
 const RootPath string = "/v3.1/"
 

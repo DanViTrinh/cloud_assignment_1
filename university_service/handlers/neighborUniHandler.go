@@ -38,34 +38,47 @@ func handleGetNeighborUni(w http.ResponseWriter, r *http.Request) error {
 	}
 
 	// get border codes
-	borderCountries, borderErr := getBorderCodes(searchCountry)
+	borderCodes, borderErr := getBorderCodes(searchCountry)
 	if borderErr != nil {
 		return borderErr
 	}
 
-	// get country names for borders
-	foundCountries, foundCountryErr := getCountryNames(borderCountries)
-	if foundCountryErr != nil {
-		return foundCountryErr
+	// get cca2 of border codes
+	borderCountries, countryErr := getCountriesWithCodes(borderCodes)
+	if countryErr != nil {
+		return countryErr
 	}
 
-	// getting universities in bordering countries
-	var finalUnis []util.Uni
+	// getting universities with uniName
 	uniApiUrl, err := url.Parse(util.UniAPI +
 		util.UniSearch)
 	if err != nil {
 		return err
 	}
-	for i := 0; i < len(foundCountries) &&
-		(len(finalUnis) <= limit || !limitAvailable); i++ {
 
-		country := foundCountries[i]
-		var foundUnis []util.Uni
-		err := fillUnisFromCountry(country, uniName, &foundUnis, *uniApiUrl)
-		if err != nil {
-			return err
+	uniParams := url.Values{"name": []string{uniName}}
+	uniApiUrl.RawQuery = uniParams.Encode()
+
+	var unisWithName []util.Uni
+	err = util.FillUnisWithURL(uniApiUrl.String(), &unisWithName)
+	if err != nil {
+		return err
+	}
+
+	var finalUnis []util.Uni
+
+	// loop runs through all the unis with name or until
+	// limit amount of unis is found, if limit is available
+	for i := 0; i < len(unisWithName) &&
+		(len(finalUnis) <= limit || !limitAvailable); i++ {
+		found := false
+		for bI := 0; bI < len(borderCountries) && !found; bI++ {
+			if unisWithName[i].IsoCode == borderCountries[bI].Cca2 {
+				finalUnis = append(finalUnis, unisWithName[i])
+				found = true
+			}
 		}
-		finalUnis = append(finalUnis, foundUnis...)
+
 	}
 
 	// limiting the final array
@@ -130,7 +143,7 @@ func getLimit(r *http.Request) (int, bool, error) {
 //	[]string - a list of the bordering country codes
 //	ServerError - if the operation failed
 func getBorderCodes(searchCountry string) ([]string, error) {
-	var borderCountries []util.Country
+	var countryInSingleArr []util.Country
 
 	countryApiUrlWithCode := util.CountryAPI +
 		util.CountryName + "/" + searchCountry
@@ -142,13 +155,13 @@ func getBorderCodes(searchCountry string) ([]string, error) {
 	fullTextParams := url.Values{"fullText": []string{"true"}}
 	base.RawQuery = fullTextParams.Encode()
 
-	err = util.FillCountriesWithURL(base.String(), &borderCountries)
+	err = util.FillCountriesWithURL(base.String(), &countryInSingleArr)
 
 	if err != nil {
 		return nil, err
 	}
-	if len(borderCountries) != 0 {
-		return borderCountries[0].BorderingCodes, nil
+	if len(countryInSingleArr) != 0 {
+		return countryInSingleArr[0].BorderingCodes, nil
 	}
 	// return empty list
 	return []string{}, nil
@@ -165,12 +178,12 @@ func getBorderCodes(searchCountry string) ([]string, error) {
 //	[]CountryNames - list of country names for each country code
 //					 country names will have the same index as country code
 //	ServerError - if the operation failed
-func getCountryNames(countryCodes []string) ([]util.Country, error) {
+func getCountriesWithCodes(countryCodes []string) ([]util.Country, error) {
 	var foundCountries []util.Country
 
 	for i := 0; i < len(countryCodes); i++ {
 
-		country := countryCodes[0]
+		country := countryCodes[i]
 		countryApiUrlWithCode := util.CountryAPI +
 			util.CountryCode + "/" + country
 
