@@ -147,7 +147,11 @@ func getBorderCodes(searchCountry string) ([]string, error) {
 	if err != nil {
 		return nil, err
 	}
-	return borderCountries[0].BorderingCodes, nil
+	if len(borderCountries) != 0 {
+		return borderCountries[0].BorderingCodes, nil
+	}
+	// return empty list
+	return []string{}, nil
 }
 
 // Getting common name of the bordering countries
