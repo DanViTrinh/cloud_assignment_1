@@ -10,11 +10,27 @@ import (
 )
 
 // Gets response from api url Populates data with the response
+//
+// Parameters:
+//
+//	apiUrl - the url of the api that gets data
+//	data - the data that will be filled
+//
+// Returns:
+//
+//	ServerError - if the call to api fails or fails during marshal of data
 func FillDataFromApi(apiURL string, data interface{}) error {
 	res, err := http.Get(apiURL)
 	if err != nil {
 		return NewServerError(err, http.StatusInternalServerError,
-			InternalErrMsg, "error in getting response from api")
+			InternalErrMsg, "error in getting response from "+apiURL+" :")
+	}
+
+	// if status code is not ok
+	if res.StatusCode != http.StatusOK {
+		err := fmt.Errorf("got status: %d from %s", res.StatusCode, apiURL)
+		return NewServerError(err, http.StatusInternalServerError,
+			InternalErrMsg, "error in getting response from "+apiURL+" :")
 	}
 
 	defer res.Body.Close()
@@ -36,6 +52,15 @@ func FillDataFromApi(apiURL string, data interface{}) error {
 
 // Display a struct through writer
 // The displayed struct will be displayed as json
+//
+// Parameters:
+//
+//	w - the http.ResponseWriter that the data will be displayed to
+//	data - the struct that is gonna be displayed
+//
+// Returns:
+//
+//	ServerError - if fails during marshal of data or when printing response
 func DisplayData(w http.ResponseWriter, data interface{}) error {
 
 	w.Header().Add("content-type", "application/json")
@@ -58,9 +83,18 @@ func DisplayData(w http.ResponseWriter, data interface{}) error {
 // Gets params from url from startParam to the end of param
 // has to check for a matching length. Error will be returned if empty param
 // is found.
-// startParam is the index of the param that you want to start with.
-// amount is the amount of params you want out.
-// amount has to be amount from startParam to end of param
+//
+// Parameters:
+//
+//	url - the url to fetch parts from. Should not contain parameters ie. "?"
+//	startParam - the index of the param that you want to start with.
+//	amount - amount of params you want returned. amount has to be amount from
+//			 startParam to end of param
+//
+// Returns:
+//
+//	string[] - list of url parts from startParam to end
+//	error - if the url has invalid length or empty in desired parts
 func GetUrlParts(url string, startParam, amount int) ([]string, error) {
 
 	// removes trailing "/"

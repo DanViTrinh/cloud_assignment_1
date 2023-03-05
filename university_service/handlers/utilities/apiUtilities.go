@@ -1,5 +1,14 @@
 package utilities
 
+// Adds extra country info to unis like language and map location.
+//
+// Parameters:
+//
+//	unis - pointer to the uni array that is gonna get extra country info
+//
+// Returns:
+//
+//	ServerError - if failed to fill data from api
 func AddCountryInfoToUnis(unis *[]Uni) error {
 	//TODO: change implementation, weird.
 	//TODO: make a global foundCountries to lessen api calls

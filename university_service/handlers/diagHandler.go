@@ -9,8 +9,11 @@ import (
 // Starts time at the beginning of service
 var startTime time.Time = time.Now()
 
-// TODO: Debate: what to do when the service is down and unavailable
-// should i set a default status code instead of returning if error occurred
+// Diagnostic handler. Gets status of foreign api's and current api
+//
+// Returns:
+//
+//	ServerError - if contact with foreign api or writing response failed
 func DiagHandler(w http.ResponseWriter, r *http.Request) error {
 
 	var diagInfo u.DiagInfo

@@ -2,7 +2,7 @@ name: Pushing
 
 on:
   push:
-    branches: [main, deploy]
+    # branches: [main, deploy] # commented because i want to copy on all branches
 
 jobs:
   copy-file:

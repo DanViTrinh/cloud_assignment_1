@@ -8,6 +8,7 @@ import (
 	util "university_service/handlers/utilities"
 )
 
+// Handles call neighbor unis
 func NeighborUniHandler(w http.ResponseWriter, r *http.Request) error {
 	switch r.Method {
 	case http.MethodGet:
@@ -19,6 +20,7 @@ func NeighborUniHandler(w http.ResponseWriter, r *http.Request) error {
 	}
 }
 
+// Handles get request to neighbor unis.
 func handleGetNeighborUni(w http.ResponseWriter, r *http.Request) error {
 	// get param parts
 	urlParts, paramErr := util.GetUrlParts(r.URL.Path, 4, 2)
@@ -81,13 +83,19 @@ func handleGetNeighborUni(w http.ResponseWriter, r *http.Request) error {
 	return util.DisplayData(w, &finalUnis)
 }
 
-// gets the limit param from url
+// Gets the limit param from url
+//
 // example use case:
-// limit , ok , err := getLimit(request)
+//
+//	limit , ok , err := getLimit(request)
+//
 // limit param must be a positive int
 // if limit param is invalid error will return
 // if limit not available false will be returned (ok will be false)
-// client error is returned
+//
+// Returns:
+//
+// ClientError - is returned when the url param is invalid
 func getLimit(r *http.Request) (int, bool, error) {
 	limitAvailable := false
 	urlParams := r.URL.Query()
@@ -111,6 +119,16 @@ func getLimit(r *http.Request) (int, bool, error) {
 	return limit, limitAvailable, nil
 }
 
+// Returns border codes for searchCountry
+//
+// Params:
+//
+//	searchCountry - the country to search for borders
+//
+// Returns:
+//
+//	[]string - a list of the bordering country codes
+//	ServerError - if the operation failed
 func getBorderCodes(searchCountry string) ([]string, error) {
 	var borderCountries []util.BorderCountries
 	// getting country bordering countries
@@ -132,7 +150,17 @@ func getBorderCodes(searchCountry string) ([]string, error) {
 	return borderCountries[0].BorderingCodes, nil
 }
 
-// getting common name of the bordering countries
+// Getting common name of the bordering countries
+//
+// Parameters:
+//
+//	countryCodes - the country codes used to find country names
+//
+// Returns:
+//
+//	[]CountryNames - list of country names for each country code
+//					 country names will have the same index as country code
+//	ServerError - if the operation failed
 func getCountryNames(countryCodes []string) ([]util.CountryNames, error) {
 	var foundCountries []util.CountryNames
 
@@ -155,7 +183,13 @@ func getCountryNames(countryCodes []string) ([]util.CountryNames, error) {
 	return foundCountries, nil
 }
 
-// fill uni in param with found country unis
+// Fill unis array with unis from a country
+//
+// Parameters:
+//
+//	country - the country Name/names to find unis from
+//	uniName - the uni name for searching up uni
+//	unis - a pointer to the unis array to be filled up
 func fillUnisFromCountry(country util.CountryNames, uniName string,
 	unis *[]util.Uni, apiUrl url.URL) error {
 
