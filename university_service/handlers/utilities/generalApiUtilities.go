@@ -23,7 +23,14 @@ func FillDataFromApi(apiURL string, data interface{}) error {
 	res, err := http.Get(apiURL)
 	if err != nil {
 		return NewServerError(err, http.StatusInternalServerError,
-			InternalErrMsg, "error in getting response from api")
+			InternalErrMsg, "error in getting response from "+apiURL+" :")
+	}
+
+	// if status code is not ok
+	if res.StatusCode != http.StatusOK {
+		err := fmt.Errorf("got status: %d from %s", res.StatusCode, apiURL)
+		return NewServerError(err, http.StatusInternalServerError,
+			InternalErrMsg, "error in getting response from "+apiURL+" :")
 	}
 
 	defer res.Body.Close()
