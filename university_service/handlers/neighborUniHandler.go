@@ -201,26 +201,3 @@ func getCountriesWithCodes(countryCodes []string) ([]util.Country, error) {
 	}
 	return foundCountries, nil
 }
-
-// Fill unis array with unis from a country
-//
-// Parameters:
-//
-//	country - the country Name/names to find unis from
-//	uniName - the uni name for searching up uni
-//	unis - a pointer to the unis array to be filled up
-func fillUnisFromCountry(country util.Country, uniName string,
-	unis *[]util.Uni, apiUrl url.URL) error {
-
-	nameCountryParams := url.Values{}
-	nameCountryParams.Add("name", uniName)
-	nameCountryParams.Add("country", country.Name.Common)
-	apiUrl.RawQuery = nameCountryParams.Encode()
-
-	err := util.FillUnisWithURL(apiUrl.String(), unis)
-	if err != nil {
-		return err
-	}
-	return nil
-
-}
