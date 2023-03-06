@@ -121,6 +121,20 @@ Example response:
 }
 ```
 
+## Package structure
+```bash
+. 
+├───cmd
+├───handlers
+└───utilities
+```
+cmd is where the main is located.
+
+handlers are the different handlers for the endpoints.
+
+Utilities is the folder for code that is shared over the entire projects. 
+Things like structs, const and other general utilities.
+
 ##  Reflection
 ### Error handling 
 The error handling inn this service is inspired by:
