@@ -9,7 +9,7 @@ type Uni struct {
 	Name      string            `json:"name"`
 	WebPages  []string          `json:"web_pages"`
 	Languages map[string]string `json:"languages,omitempty"`
-	Map       string            `json:"maps,omitempty"`
+	Map       string            `json:"map,omitempty"`
 }
 
 // The fields used for country
