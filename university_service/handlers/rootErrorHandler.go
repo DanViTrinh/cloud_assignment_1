@@ -3,7 +3,7 @@ package handlers
 import (
 	"log"
 	"net/http"
-	util "university_service/handlers/utilities"
+	util "university_service/utilities"
 )
 
 // Wraps all other handlers with this func to be able to ServeHttp

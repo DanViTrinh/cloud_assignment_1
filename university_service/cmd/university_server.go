@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"os"
 	h "university_service/handlers"
-	u "university_service/handlers/utilities"
+	u "university_service/utilities"
 )
 
 func main() {

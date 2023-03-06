@@ -3,7 +3,7 @@ package handlers
 import (
 	"fmt"
 	"net/http"
-	util "university_service/handlers/utilities"
+	util "university_service/utilities"
 )
 
 // Handler for root level of url.

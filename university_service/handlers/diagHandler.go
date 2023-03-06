@@ -3,7 +3,7 @@ package handlers
 import (
 	"net/http"
 	"time"
-	u "university_service/handlers/utilities"
+	util "university_service/utilities"
 )
 
 // Starts time at the beginning of service
@@ -16,26 +16,26 @@ var startTime time.Time = time.Now()
 //	ServerError - if contact with foreign api or writing response failed
 func DiagHandler(w http.ResponseWriter, r *http.Request) error {
 
-	var diagInfo u.DiagInfo
+	var diagInfo util.DiagInfo
 
-	respUni, uniErr := http.Get(u.UniAPI)
+	respUni, uniErr := http.Get(util.UniAPI)
 	if uniErr != nil {
-		return u.NewServerError(uniErr, http.StatusInternalServerError,
-			u.InternalErrMsg, "error in getting response from uni api")
+		return util.NewServerError(uniErr, http.StatusInternalServerError,
+			util.InternalErrMsg, "error in getting response from uni api")
 	}
 	diagInfo.UniApiStatus = respUni.Status
 
-	TestCountryUrl := u.CountryAPI + u.CountryCode + u.TestCountryCode
+	TestCountryUrl := util.CountryAPI + util.CountryCode + util.TestCountryCode
 	respCountry, countryErr := http.Get(TestCountryUrl)
 	if countryErr != nil {
-		return u.NewServerError(countryErr, http.StatusInternalServerError,
-			u.InternalErrMsg, "error in getting response from country api")
+		return util.NewServerError(countryErr, http.StatusInternalServerError,
+			util.InternalErrMsg, "error in getting response from country api")
 	}
 	diagInfo.CountryApiStatus = respCountry.Status
 
-	diagInfo.Version = u.Version
+	diagInfo.Version = util.Version
 
-	diagInfo.Uptime = time.Since(startTime) / u.NanoSecInSec
+	diagInfo.Uptime = time.Since(startTime) / util.NanoSecInSec
 
-	return u.DisplayData(w, diagInfo)
+	return util.DisplayData(w, diagInfo)
 }

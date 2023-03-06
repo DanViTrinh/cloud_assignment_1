@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"net/url"
 	"strconv"
-	util "university_service/handlers/utilities"
+	util "university_service/utilities"
 )
 
 // Handles call neighbor unis
@@ -56,7 +56,7 @@ func handleGetNeighborUni(w http.ResponseWriter, r *http.Request) error {
 		return err
 	}
 
-	uniParams := url.Values{"name": []string{uniName}}
+	uniParams := url.Values{util.UniNameParam: []string{uniName}}
 	uniApiUrl.RawQuery = uniParams.Encode()
 
 	var unisWithName []util.Uni
@@ -89,7 +89,6 @@ func handleGetNeighborUni(w http.ResponseWriter, r *http.Request) error {
 	}
 
 	// adding country information to  uni
-	// TODO debate adding the already found countries to the countries cache
 	addErr := util.AddCountryInfoToUnis(&finalUnis)
 	if addErr != nil {
 		return addErr
