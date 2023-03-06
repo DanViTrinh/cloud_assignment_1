@@ -14,6 +14,7 @@ const SeveralCountryFilePath string = "./res/s_countries.json"
 const HandlerNotImplementedMessage string = "Handler not implemented"
 const RootPath string = "/v3.1/"
 
+// Parsing a json file
 func parseFile(filename string) ([]byte, error) {
 	file, e := ioutil.ReadFile(filename)
 	if e != nil {
@@ -23,6 +24,7 @@ func parseFile(filename string) ([]byte, error) {
 	return file, nil
 }
 
+// Read error
 func readErrorHandler(err error, w http.ResponseWriter) bool {
 	if err != nil {
 		http.Error(w, "Error when reading resource file (Error: "+
@@ -32,6 +34,7 @@ func readErrorHandler(err error, w http.ResponseWriter) bool {
 	return true
 }
 
+// Writes a http error response
 func writeHttpResponseErrorHandler(err error, w http.ResponseWriter) bool {
 	if err != nil {
 		http.Error(w, "Error when writing HTTP response (Error: "+
@@ -41,6 +44,7 @@ func writeHttpResponseErrorHandler(err error, w http.ResponseWriter) bool {
 	return true
 }
 
+// Displays a json file
 func displayFileHandler(w http.ResponseWriter, filepath string) {
 	w.Header().Add("content-type", "application/json")
 	output, err := parseFile(filepath)
@@ -54,6 +58,7 @@ func displayFileHandler(w http.ResponseWriter, filepath string) {
 	}
 }
 
+// Checks whether the parameters in the url is valid
 func checkParam(w http.ResponseWriter, urlPath string,
 	desiredLen int, expecting string) bool {
 
@@ -71,6 +76,8 @@ func checkParam(w http.ResponseWriter, urlPath string,
 	return true
 }
 
+// Search by name displays one country, if the name of that country is empty
+// status not found will be displayed
 func searchName(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case http.MethodGet:
@@ -97,6 +104,7 @@ func searchName(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// search by code displays on one single country
 func searchByCode(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case http.MethodGet:
@@ -112,6 +120,7 @@ func searchByCode(w http.ResponseWriter, r *http.Request) {
 
 }
 
+// handles search by sub region and returns several countries
 func searchBySubregion(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case http.MethodGet:
