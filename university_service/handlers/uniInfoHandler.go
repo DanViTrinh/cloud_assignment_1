@@ -23,7 +23,6 @@ func UniInfoHandler(w http.ResponseWriter, r *http.Request) error {
 // Displays gives found unis as a response
 func handleGetUniInfo(w http.ResponseWriter, r *http.Request) error {
 
-	// TODO: optional fix: Sometimes getting duplicate universities from real api
 	// Get the url params
 	urlParams, err := util.GetUrlParts(r.URL.Path, 4, 1)
 	if err != nil {
