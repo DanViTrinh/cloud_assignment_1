@@ -8,6 +8,7 @@ import (
 	"os"
 )
 
+// Parsing a json file
 func parseFile(filename string) ([]byte, error) {
 	file, e := ioutil.ReadFile(filename)
 	if e != nil {
@@ -17,6 +18,7 @@ func parseFile(filename string) ([]byte, error) {
 	return file, e
 }
 
+// Search handler
 func searchHandler(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case http.MethodGet:
@@ -72,7 +74,6 @@ func main() {
 	// Set up handler endpoints
 	http.HandleFunc("/search", searchHandler)
 	http.HandleFunc("/search/", searchHandler)
-
 	// Start server
 	log.Println("Starting server on port " + port + " ...")
 	log.Fatal(http.ListenAndServe(":"+port, nil))
