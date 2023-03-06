@@ -12,7 +12,6 @@ Since the project uses foreign api's I have decided to use mock servers.
 
 ## Directory structure
 ```bash
-.
 ├───.github
 │   └───workflows
 ├───mocks
@@ -22,8 +21,8 @@ Since the project uses foreign api's I have decided to use mock servers.
 │       └───res
 └───university_service
     ├───cmd
-    └───handlers
-        └───utilities
+    ├───handlers
+    └───utilities
 ```
 In .github is where all workflows (github actions) is located.
 
