@@ -11,6 +11,9 @@ Uni api: http://universities.hipolabs.com/
 Country api: https://restcountries.com/ 
 ```
 
+The service is used to search for universities, if no universities is found 
+it will return an empty array.
+
 ## .../unisearcher/v1/uniinfo/
 This endpoint retrieves university information from the foreign api's. 
 The service then uses the retrieved information to combine the two api's.
