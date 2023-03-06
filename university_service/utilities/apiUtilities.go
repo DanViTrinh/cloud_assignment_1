@@ -15,8 +15,6 @@ import (
 //
 //	ServerError - if failed to fill data from api
 func AddCountryInfoToUnis(unis *[]Uni) error {
-	//TODO: change implementation, weird.
-	//TODO: make a global foundCountries to lessen api calls
 	//PROBLEM: the response from the api is a single item array
 	foundCountries := make(map[string][]Country)
 	for index, uni := range *unis {
