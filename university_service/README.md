@@ -185,3 +185,35 @@ The api makes a lot of the same calls to the countries api. It does have a local
 for each request, but not a persistent cache that can be used for all the 
 requests. Introducing a cache would of course be more taxing on the server 
 resources, but it would improve performance. 
+
+## How to build
+Navigate into cmd and run this command:
+```bash
+go run university_server.go
+```
+
+## To use mock instead of the real server
+Navigate into utilities and open the constants.go file. 
+
+Uncomment the mock url and comment out the real url below.
+```go
+
+// real
+const UniAPI = "http://universities.hipolabs.com"
+
+// mock
+// const UniAPI = "http://localhost:8082"
+
+// real
+const CountryAPI = "https://restcountries.com/v3.1"
+
+// mock
+// const CountryAPI = "http://localhost:8081/v3.1"
+
+```
+
+Remember to start the mock servers, further information to start the mock 
+servers is given in the mock readme
+
+
+
