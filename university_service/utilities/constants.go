@@ -17,6 +17,7 @@ const UniAPI = "http://universities.hipolabs.com"
 // const UniAPI = "http://localhost:8082"
 
 const UniSearch = "/search"
+const UniNameParam = "name_contains"
 
 // countries api
 

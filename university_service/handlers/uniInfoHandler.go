@@ -38,7 +38,7 @@ func handleGetUniInfo(w http.ResponseWriter, r *http.Request) error {
 	}
 
 	// Adding params to url
-	params := url.Values{"name": []string{urlParams[0]}}
+	params := url.Values{util.UniNameParam: []string{urlParams[0]}}
 	uniApiUrl.RawQuery = params.Encode()
 
 	var unisFound []util.Uni
