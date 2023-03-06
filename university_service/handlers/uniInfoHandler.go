@@ -4,7 +4,7 @@ import (
 	"errors"
 	"net/http"
 	"net/url"
-	util "university_service/handlers/utilities"
+	util "university_service/utilities"
 )
 
 // Handles getting uni info
