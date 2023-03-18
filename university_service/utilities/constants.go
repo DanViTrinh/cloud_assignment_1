@@ -21,8 +21,11 @@ const UniNameParam = "name_contains"
 
 // countries api
 
+// NTNU country api
+const CountryAPI = "http://129.241.150.113:8080/v3.1"
+
 // real
-const CountryAPI = "https://restcountries.com/v3.1"
+// const CountryAPI = "https://restcountries.com/v3.1"
 
 // mock
 // const CountryAPI = "http://localhost:8081/v3.1"
